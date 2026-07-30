@@ -3,707 +3,735 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blancoxc.co.za — Beat Marketplace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <title>Digital Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
     <style>
-        :root{--bg:#050505;--chrome:#c0c0c0;--chrome-light:#e8e8e8;--chrome-dark:#6b6b6b;--glass-bg:rgba(192,192,192,.04);--glass-border:rgba(192,192,192,.1);--glass-hover:rgba(192,192,192,.08);--text:#e0e0e0;--text-muted:#555}
-        *{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--chrome-dark) var(--bg)}
-        body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
-        .chrome-text{background:linear-gradient(180deg,#fff,#c0c0c0 40%,#808080 70%,#a0a0a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .chrome-shine{background:linear-gradient(105deg,#666,#fff 25%,#c0c0c0 50%,#fff 75%,#666);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 4s ease-in-out infinite}
-        @keyframes shine{0%,100%{background-position:200% center}50%{background-position:-200% center}}
-        .glass{background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border)}
-        .glass-strong{background:rgba(192,192,192,.06);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(192,192,192,.12)}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; overflow-x: hidden; }
 
-        .domain-notice{position:fixed;top:64px;left:0;right:0;z-index:999;padding:.55rem 3rem;background:rgba(192,192,192,.06);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);text-align:center;font-size:.72rem;color:var(--chrome-dark);letter-spacing:.3px;transition:transform .4s ease}
-        .domain-notice.hidden{transform:translateY(-100%)}
-        .domain-notice b{color:var(--chrome-light);font-weight:600}
-        .domain-notice .close-notice{position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--chrome-dark);cursor:pointer;font-size:.7rem;padding:.2rem;transition:color .3s}
-        .domain-notice .close-notice:hover{color:var(--chrome-light)}
-
-        nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 3rem;transition:all .4s}
-        nav.scrolled{background:rgba(5,5,5,.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid var(--glass-border)}
-        .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
-        .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;color:var(--chrome-light);text-decoration:none;letter-spacing:-.5px;display:flex;align-items:center;gap:.5rem}
-        .logo-dot{width:7px;height:7px;background:var(--chrome-light);border-radius:50%;box-shadow:0 0 10px rgba(192,192,192,.5);animation:pulse 2s ease-in-out infinite}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-        .nav-wa{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1.1rem;border:1px solid var(--glass-border);border-radius:6px;color:var(--chrome-light);background:var(--glass-bg);text-decoration:none;font-size:.78rem;font-weight:400;transition:all .3s}
-        .nav-wa:hover{background:var(--glass-hover);border-color:var(--chrome-dark)}
-
-        .hero{min-height:62vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:8rem 3rem 2.5rem}
-        .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(192,192,192,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(192,192,192,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 55% 50% at 50% 50%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 55% 50% at 50% 50%,black,transparent)}
-        .hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(160px);opacity:.08}
-        .hg1{top:-180px;right:-80px;background:radial-gradient(circle,#888,transparent)}
-        .hg2{bottom:-180px;left:-80px;background:radial-gradient(circle,#666,transparent)}
-        .hero-content{position:relative;z-index:1;text-align:center;max-width:850px}
-        .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .9rem;border-radius:100px;font-size:.68rem;color:var(--chrome-dark);text-transform:uppercase;letter-spacing:2px;margin-bottom:1.8rem;animation:up .8s ease-out}
-        .hbd{width:5px;height:5px;background:var(--chrome);border-radius:50%;animation:pulse 2s ease-in-out infinite}
-        .hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,6.5vw,5rem);font-weight:700;line-height:.95;letter-spacing:-2.5px;margin-bottom:1.2rem;animation:up .8s ease-out .1s both}
-        .hero p{font-size:1rem;color:var(--text-muted);max-width:480px;margin:0 auto 2.2rem;font-weight:200;animation:up .8s ease-out .2s both}
-        .hero-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;animation:up .8s ease-out .3s both}
-        .btn-p{padding:.75rem 1.8rem;background:linear-gradient(135deg,#d0d0d0,#808080);color:#050505;border:none;border-radius:7px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
-        .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(192,192,192,.2)}
-        .btn-s{padding:.75rem 1.8rem;background:transparent;color:var(--chrome);border:1px solid var(--glass-border);border-radius:7px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:400;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
-        .btn-s:hover{background:var(--glass-hover);border-color:var(--chrome-dark);transform:translateY(-2px)}
-        .hero-wave{display:flex;align-items:center;justify-content:center;gap:2.5px;height:36px;margin-top:2rem;animation:up .8s ease-out .4s both}
-        .wb{width:2.5px;background:linear-gradient(180deg,var(--chrome-light),var(--chrome-dark));border-radius:3px;animation:wf 1.2s ease-in-out infinite}
-        @keyframes wf{0%,100%{height:4px;opacity:.3}50%{height:28px;opacity:1}}
-        @keyframes up{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
-
-        .beats-sec{padding:3rem 3rem 5rem}
-        .beats-sec-inner{margin:0 auto;transition:max-width .4s ease}
-        .beats-sec-inner.single{max-width:480px}
-        .beats-sec-inner.multi{max-width:1400px}
-        .sec-head{margin-bottom:2.5rem;text-align:center}
-        .sec-label{font-size:.65rem;text-transform:uppercase;letter-spacing:3px;color:var(--chrome-dark);margin-bottom:.7rem;display:block}
-        .sec-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;letter-spacing:-1px}
-        .sec-desc{color:var(--text-muted);font-weight:200;font-size:.85rem;margin-top:.4rem}
-        .beats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.2rem}
-
-        .bc{border-radius:14px;overflow:hidden;transition:all .35s}
-        .bc:hover{transform:translateY(-3px);border-color:rgba(192,192,192,.18);background:var(--glass-hover)}
-        .bc-img{position:relative;width:100%;height:200px;overflow:hidden}
-        .bc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
-        .bc:hover .bc-img img{transform:scale(1.03)}
-        .bc-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(transparent,rgba(5,5,5,.6));pointer-events:none}
-
-        .bc-embed{position:relative;height:80px;background:#111;overflow:hidden}
-        .bc-embed iframe{width:100%;height:100%;border:none;display:block}
-        .bc-platform{position:absolute;top:8px;right:8px;z-index:3;padding:.2rem .55rem;border-radius:4px;font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.8px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-        .bc-platform.sp{background:rgba(30,215,96,.15);color:#1ed760;border:1px solid rgba(30,215,96,.2)}
-        .bc-platform.sc{background:rgba(255,85,0,.12);color:#ff5500;border:1px solid rgba(255,85,0,.18)}
-        .bc-platform.other{background:rgba(192,192,192,.1);color:var(--chrome-dark);border:1px solid rgba(192,192,192,.1)}
-
-        .bc-info{padding:1rem 1rem .85rem}
-        .bc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.2rem}
-        .bc-name{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--chrome-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
-        .bc-price{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;color:var(--chrome);white-space:nowrap}
-        .bc-prod{font-size:.72rem;color:var(--text-muted);margin-bottom:.65rem}
-        .bc-bottom{display:flex;justify-content:space-between;align-items:center}
-        .bc-tags{display:flex;gap:.3rem;flex-wrap:wrap}
-        .bc-tag{padding:.13rem .45rem;border-radius:3px;font-size:.58rem;text-transform:uppercase;letter-spacing:.8px;background:rgba(192,192,192,.06);color:var(--chrome-dark);border:1px solid rgba(192,192,192,.06)}
-        .bc-actions{display:flex;align-items:center;gap:.5rem}
-
-        .bc-like{display:flex;align-items:center;gap:.25rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;transition:all .25s;padding:.15rem .35rem;border-radius:4px;min-width:36px}
-        .bc-like:hover{color:var(--chrome)}
-        .bc-like.liked{color:#e04040}
-        .bc-like.liked i{animation:pop .35s ease}
-        @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
-        .bc-like.loading{opacity:.4;pointer-events:none}
-        .bc-wa{display:flex;align-items:center;gap:.25rem;background:none;border:none;color:#25d366;font-size:.75rem;cursor:pointer;transition:all .25s;padding:.15rem .35rem;border-radius:4px;text-decoration:none}
-        .bc-wa:hover{color:#2ed573}
-
-        .submit-row{text-align:center;margin-top:3rem}
-        .submit-row .btn-s{font-size:.8rem;padding:.65rem 1.5rem}
-        .empty-state{text-align:center;padding:3rem 1rem;color:var(--text-muted);font-size:.85rem;font-weight:200}
-
-        .db-status{position:fixed;bottom:1rem;left:1rem;font-size:.62rem;color:var(--text-muted);z-index:100;display:flex;align-items:center;gap:.4rem;opacity:.4;transition:opacity .3s}
-        .db-status:hover{opacity:1}
-        .db-dot{width:5px;height:5px;border-radius:50%;background:#e04040;transition:background .3s}
-        .db-dot.ok{background:#1ed760}
-
-        .how-sec{padding:4rem 3rem;border-top:1px solid rgba(192,192,192,.04);border-bottom:1px solid rgba(192,192,192,.04)}
-        .how-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start}
-        .how-steps{display:flex;flex-direction:column}
-        .hs{display:flex;align-items:flex-start;gap:1.2rem;padding:1.3rem 0;position:relative}
-        .hs:not(:last-child)::after{content:'';position:absolute;left:17px;top:46px;bottom:0;width:1px;background:linear-gradient(180deg,var(--glass-border),transparent)}
-        .hs-n{width:36px;height:36px;min-width:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:var(--chrome-light);border:1px solid rgba(192,192,192,.12);background:var(--glass-bg)}
-        .hs-t h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--chrome-light);margin-bottom:.15rem}
-        .hs-t p{font-size:.8rem;color:var(--text-muted);font-weight:200;line-height:1.6}
-
-        footer{border-top:1px solid rgba(192,192,192,.04);padding:2.5rem 3rem}
-        .ft-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-        .ft-left{display:flex;align-items:center;gap:1.5rem}
-        .ft-wa a{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);text-decoration:none;font-size:.78rem;font-weight:200;transition:color .3s}
-        .ft-wa a:hover{color:var(--chrome-light)}
-        .ft-copy{font-size:.68rem;color:var(--text-muted);font-weight:200}
-
-        .modal-overlay{position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:2rem}
-        .modal-overlay.open{opacity:1;pointer-events:all}
-        .modal{width:100%;max-width:520px;border-radius:20px;padding:2.5rem;transform:scale(.95) translateY(20px);transition:transform .3s;position:relative;max-height:90vh;overflow-y:auto}
-        .modal-overlay.open .modal{transform:scale(1) translateY(0)}
-        .modal-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer;transition:color .3s}
-        .modal-close:hover{color:var(--chrome-light)}
-        .modal h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--chrome-light);margin-bottom:.4rem}
-        .modal>p{font-size:.82rem;color:var(--text-muted);font-weight:200;margin-bottom:1.8rem;line-height:1.6}
-        .fg{margin-bottom:1.1rem}
-        .fg label{display:block;font-size:.7rem;color:var(--chrome-dark);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
-        .fg input,.fg select,.fg textarea{width:100%;padding:.75rem .9rem;background:rgba(192,192,192,.04);border:1px solid var(--glass-border);border-radius:8px;color:var(--chrome-light);font-family:'Outfit',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s}
-        .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--chrome-dark)}
-        .fg select option{background:#111;color:var(--text)}
-        .fg textarea{resize:vertical;min-height:60px}
-        .fg .hint{font-size:.68rem;color:var(--text-muted);margin-top:.35rem;line-height:1.5;font-weight:200}
-        .fg .hint b{color:var(--chrome-dark);font-weight:400}
-        .form-submit{width:100%;padding:.85rem;background:linear-gradient(135deg,#d0d0d0,#808080);color:#050505;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .3s;margin-top:.5rem}
-        .form-submit:hover{box-shadow:0 10px 40px rgba(192,192,192,.2)}
-
-        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);z-index:2000;padding:.7rem 1.3rem;border-radius:9px;font-size:.8rem;color:var(--chrome-light);transition:transform .4s ease;display:flex;align-items:center;gap:.5rem;white-space:nowrap}
-        .toast.show{transform:translateX(-50%) translateY(0)}
-        .ptc{position:fixed;inset:0;z-index:0;pointer-events:none}
-        .reveal{opacity:0;transform:translateY(25px);transition:opacity .6s ease,transform .6s ease}
-        .reveal.vis{opacity:1;transform:translateY(0)}
-
-        @media(max-width:900px){
-            nav{padding:0 1.5rem}
-            .domain-notice{padding:.5rem 1.5rem;font-size:.68rem}
-            .hero{padding:8rem 1.5rem 2rem}
-            .beats-sec{padding:2rem 1.5rem 4rem}
-            .beats-sec-inner.single,.beats-sec-inner.multi{max-width:100%}
-            .how-sec{padding:3rem 1.5rem}
-            .how-inner{grid-template-columns:1fr;gap:2rem}
-            footer{padding:2rem 1.5rem}
+        .grain {
+            position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
-        @media(max-width:600px){
-            .beats-grid{grid-template-columns:1fr}
-            .bc-img{height:160px}
-            .ft-inner{flex-direction:column;text-align:center}
-            .ft-left{flex-direction:column}
-            .db-status{display:none}
-            .modal{padding:1.8rem}
-            .domain-notice .close-notice{right:.8rem}
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(0); }
+            to { transform: translateY(100%); }
+        }
+
+        .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-fade-up-delay-1 { animation: fadeInUp 0.8s ease-out 0.15s forwards; opacity: 0; }
+        .animate-fade-up-delay-2 { animation: fadeInUp 0.8s ease-out 0.3s forwards; opacity: 0; }
+        .animate-fade-up-delay-3 { animation: fadeInUp 0.8s ease-out 0.45s forwards; opacity: 0; }
+
+        .service-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .service-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 25px 60px -12px rgba(0,0,0,0.5), 0 0 40px rgba(255,255,255,0.03);
+        }
+        .service-card:hover .card-icon {
+            transform: scale(1.1);
+            background: #fff;
+            color: #000;
+        }
+        .service-card:hover .card-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+        .service-card:hover .card-tag {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .card-icon { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-arrow { transition: all 0.3s ease; opacity: 0.4; }
+        .card-tag { transition: background 0.3s ease; }
+
+        .btn-primary {
+            background: #fff; color: #000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-primary:hover {
+            background: #e5e5e5;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,0.2); color: #fff; background: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-outline:hover {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
+        }
+        .btn-ghost {
+            color: rgba(255,255,255,0.6); background: transparent;
+            transition: all 0.3s ease;
+        }
+        .btn-ghost:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.5);
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+        .nav-link:hover { color: #fff; }
+        .nav-link.active { color: #fff; }
+
+        .marquee-track { animation: marquee 25s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .modal-overlay {
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .modal-content {
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .form-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+        }
+        .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+        .toast {
+            transform: translateY(20px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toast.show {
+            transform: translateY(0); opacity: 1;
+        }
+
+        .glow-dot { box-shadow: 0 0 8px rgba(255,255,255,0.4); }
+
+        .phone-link { transition: all 0.3s ease; }
+        .phone-link:hover { color: #fff; }
+
+        .copy-flash { animation: copyPulse 0.6s ease-out; }
+        @keyframes copyPulse {
+            0% { background: rgba(255,255,255,0.15); }
+            100% { background: transparent; }
+        }
+
+        .cookie-banner {
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .cookie-banner.hiding {
+            animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+        .footer-link {
+            color: rgba(255,255,255,0.25);
+            transition: color 0.3s ease;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.08);
+            text-underline-offset: 2px;
+        }
+        .footer-link:hover {
+            color: rgba(255,255,255,0.6);
+            text-decoration-color: rgba(255,255,255,0.2);
+        }
     </style>
 </head>
 <body>
+    <div class="grain"></div>
 
-<canvas class="ptc" id="ptc"></canvas>
-<div class="toast glass" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
-<div class="db-status" id="dbStatus"><span class="db-dot" id="dbDot"></span><span id="dbLabel">Not connected</span></div>
-
-<!-- DOMAIN NOTICE -->
-<div class="domain-notice" id="domainNotice">
-    This website will soon move to <b>blancoxc.co.za</b> — bookmark it now.
-    <button class="close-notice" id="closeNotice" aria-label="Dismiss"><i class="fas fa-xmark"></i></button>
-</div>
-
-<!-- NAV -->
-<nav id="nav">
-    <div class="nav-inner">
-        <a href="#" class="logo"><span class="logo-dot"></span>blancoxc.co.za</a>
-        <a href="https://wa.me/27610859002" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> 061 085 9002</a>
-    </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-glow hg1"></div>
-    <div class="hero-glow hg2"></div>
-    <div class="hero-content">
-        <div class="hero-badge glass"><span class="hbd"></span>Beat Marketplace</div>
-        <h1><span class="chrome-shine">Find</span> the beat.<br><span class="chrome-text">Contact</span> the producer.<br><span class="chrome-shine">Make it yours.</span></h1>
-        <p>Browse beats via Spotify and SoundCloud. Tap WhatsApp to deal directly with the producer.</p>
-        <div class="hero-btns">
-            <a href="#beats" class="btn-p"><i class="fas fa-headphones"></i> Browse Beats</a>
-            <a href="https://wa.me/27610859002?text=Hi%2C%20I%27m%20interested%20in%20a%20beat" target="_blank" class="btn-s"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
-        </div>
-        <div class="hero-wave" id="hWave"></div>
-    </div>
-</section>
-
-<!-- BEATS -->
-<section class="beats-sec" id="beats">
-    <div class="beats-sec-inner single" id="beatsInner">
-        <div class="sec-head reveal">
-            <span class="sec-label">Available Now</span>
-            <h2 class="sec-title chrome-text">Beats</h2>
-            <p class="sec-desc">Listen below, then tap WhatsApp to contact the producer directly.</p>
-        </div>
-        <div class="beats-grid" id="beatsGrid"></div>
-        <div class="empty-state" id="emptyState" style="display:none">
-            <i class="fas fa-music" style="font-size:1.5rem;opacity:.3;display:block;margin-bottom:.8rem"></i>
-            No beats listed yet. Be the first to submit.
-        </div>
-        <div class="submit-row reveal">
-            <button class="btn-s" id="openSubmit"><i class="fas fa-plus"></i> Submit a Beat</button>
-        </div>
-    </div>
-</section>
-
-<!-- HOW -->
-<section class="how-sec">
-    <div class="how-inner">
-        <div class="reveal">
-            <span class="sec-label">How It Works</span>
-            <h2 class="sec-title chrome-text">Three steps.</h2>
-            <p class="sec-desc" style="margin-top:.6rem">No accounts, no fees, no waiting.</p>
-        </div>
-        <div class="how-steps">
-            <div class="hs reveal"><div class="hs-n">01</div><div class="hs-t"><h3>Listen</h3><p>Hit play on the embedded player. If it fits, move on.</p></div></div>
-            <div class="hs reveal"><div class="hs-n">02</div><div class="hs-t"><h3>Reach Out</h3><p>Tap the WhatsApp icon. It opens a chat with the producer, pre-filled with the beat name.</p></div></div>
-            <div class="hs reveal"><div class="hs-n">03</div><div class="hs-t"><h3>Deal Directly</h3><p>Discuss price, license, and payment one-on-one. Receive your files straight from the producer.</p></div></div>
-        </div>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-    <div class="ft-inner">
-        <div class="ft-left">
-            <a href="#" class="logo"><span class="logo-dot"></span>blancoxc.co.za</a>
-            <div class="ft-wa"><a href="https://wa.me/27610859002" target="_blank"><i class="fab fa-whatsapp"></i> 061 085 9002</a></div>
-        </div>
-        <p class="ft-copy">2026 blancoxc.co.za</p>
-    </div>
-</footer>
-
-<!-- SUBMIT MODAL -->
-<div class="modal-overlay" id="submitModal">
-    <div class="modal glass-strong">
-        <button class="modal-close" id="closeSubmit" aria-label="Close"><i class="fas fa-xmark"></i></button>
-        <h3>Submit a Beat</h3>
-        <p>Your beat will appear once approved. Provide a link to your beat on Spotify, SoundCloud, or any platform with an embed player.</p>
-        <form id="submitForm">
-            <div class="fg">
-                <label>Beat Name</label>
-                <input type="text" id="fName" placeholder="e.g. Midnight Drive" required>
+    <!-- Nav -->
+    <nav class="fixed top-0 left-0 right-0 z-40 px-6 py-5 flex items-center justify-between" style="mix-blend-mode: difference;">
+        <div class="flex items-center gap-6">
+            <a href="index.html" class="text-white font-semibold text-lg tracking-tight flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-white inline-block"></span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="nav-link active text-xs font-medium tracking-wider uppercase">Services</a>
+                <a href="beats.html" class="nav-link text-xs font-medium tracking-wider uppercase flex items-center gap-1.5">
+                    <i data-lucide="music" class="w-3 h-3"></i>
+                    Beats
+                </a>
             </div>
-            <div class="fg">
-                <label>Producer Name</label>
-                <input type="text" id="fProducer" placeholder="e.g. BlancoXCBeats" required>
+        </div>
+        <div class="flex items-center gap-5">
+            <a href="tel:0610859002" class="phone-link text-white/60 text-xs font-medium tracking-wider flex items-center gap-2">
+                <i data-lucide="phone" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">061 085 9002</span>
+            </a>
+            <div class="hidden sm:flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-white glow-dot"></div>
+                <span class="text-white/60 text-xs font-medium tracking-wider uppercase">Available</span>
             </div>
-            <div class="fg">
-                <label>Beat Link</label>
-                <input type="url" id="fLink" placeholder="Paste any Spotify or SoundCloud link" required>
-                <div class="hint">Paste a regular or embed link. We auto-convert it.<br><b>Spotify:</b> Any track URL works.<br><b>SoundCloud:</b> Any track URL works.</div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-                <div class="fg">
-                    <label>Price</label>
-                    <input type="text" id="fPrice" placeholder="e.g. R500" required>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="min-h-[70vh] flex flex-col justify-end px-6 pb-12 md:px-12 md:pb-16 max-w-[1400px] mx-auto">
+        <div class="animate-fade-up">
+            <p class="text-xs font-medium tracking-[0.2em] uppercase text-white/40 mb-6">Digital Services</p>
+        </div>
+        <h1 class="text-[clamp(2.5rem,8vw,6rem)] font-medium leading-[0.95] tracking-tight animate-fade-up-delay-1">
+            Clean work,<br>
+            <span class="text-white/40">fair price.</span>
+        </h1>
+        <div class="mt-8 flex items-center gap-3 animate-fade-up-delay-2">
+            <div class="w-12 h-px bg-white/20"></div>
+            <p class="text-white/50 text-sm font-light">Two services. No fluff.</p>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="overflow-hidden py-6 border-y border-white/5">
+        <div class="flex whitespace-nowrap marquee-track" style="width: max-content;">
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Websites</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">CV Design</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">From R70</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Fast Delivery</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Quality First</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Websites</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">CV Design</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">From R70</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Fast Delivery</span>
+            <span class="mx-4 text-white/10">✦</span>
+            <span class="mx-8 text-xs font-medium tracking-[0.3em] uppercase text-white/15">Quality First</span>
+            <span class="mx-4 text-white/10">✦</span>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <section class="px-6 md:px-12 py-20 md:py-28 max-w-[1400px] mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <!-- Website Card -->
+            <div class="service-card rounded-2xl p-8 md:p-10 bg-white/[0.03] backdrop-blur-sm relative overflow-hidden group animate-fade-up-delay-2">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/[0.03] to-transparent rounded-bl-full"></div>
+                <div class="relative z-10">
+                    <div class="card-icon w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-8">
+                        <i data-lucide="globe" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="card-tag px-3 py-1 rounded-full bg-white/5 text-[11px] font-medium tracking-wider uppercase text-white/50">Landing Pages</span>
+                        <span class="card-tag px-3 py-1 rounded-full bg-white/5 text-[11px] font-medium tracking-wider uppercase text-white/50">Portfolio</span>
+                        <span class="card-tag px-3 py-1 rounded-full bg-white/5 text-[11px] font-medium tracking-wider uppercase text-white/50">Business</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-medium tracking-tight mb-3">Request Website</h3>
+                    <p class="text-white/40 text-sm font-light leading-relaxed mb-8 max-w-sm">
+                        A clean, responsive website tailored to your needs. From single-page sites to multi-section builds — modern and fast.
+                    </p>
+                    <div class="divider mb-8"></div>
+                    <div class="flex items-end justify-between flex-wrap gap-4">
+                        <div>
+                            <p class="text-[11px] font-medium tracking-[0.15em] uppercase text-white/30 mb-1">Starting from</p>
+                            <p class="text-3xl md:text-4xl font-semibold tracking-tight">
+                                R300<span class="text-lg font-light text-white/30"> – R1,000</span>
+                            </p>
+                        </div>
+                        <button onclick="openModal('website')" class="btn-primary px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                            Request
+                            <i data-lucide="arrow-right" class="w-4 h-4 card-arrow"></i>
+                        </button>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/5 flex items-center gap-4 flex-wrap">
+                        <div class="flex items-center gap-2 text-white/30 text-xs">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span>3–7 day delivery</span>
+                        </div>
+                        <div class="w-1 h-1 rounded-full bg-white/10"></div>
+                        <div class="flex items-center gap-2 text-white/30 text-xs">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                            <span>Revisions included</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="fg">
-                    <label>Genre</label>
-                    <select id="fGenre" required>
-                        <option value="">Select</option>
-                        <option>Hip-Hop</option>
-                        <option>Trap</option>
-                        <option>Amapiano</option>
-                        <option>Afrobeat</option>
-                        <option>R&B</option>
-                        <option>Gqom</option>
-                        <option>Pop</option>
-                        <option>Other</option>
+            </div>
+
+            <!-- CV Card -->
+            <div class="service-card rounded-2xl p-8 md:p-10 bg-white/[0.03] backdrop-blur-sm relative overflow-hidden group animate-fade-up-delay-3">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/[0.03] to-transparent rounded-bl-full"></div>
+                <div class="relative z-10">
+                    <div class="card-icon w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-8">
+                        <i data-lucide="file-text" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="card-tag px-3 py-1 rounded-full bg-white/5 text-[11px] font-medium tracking-wider uppercase text-white/50">Professional</span>
+                        <span class="card-tag px-3 py-1 rounded-full bg-white/5 text-[11px] font-medium tracking-wider uppercase text-white/50">Modern Layout</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-medium tracking-tight mb-3">Request CV</h3>
+                    <p class="text-white/40 text-sm font-light leading-relaxed mb-8 max-w-sm">
+                        A professionally designed CV that stands out. Clean typography, structured layout, ready to print or send digitally.
+                    </p>
+                    <div class="divider mb-8"></div>
+                    <div class="flex items-end justify-between flex-wrap gap-4">
+                        <div>
+                            <p class="text-[11px] font-medium tracking-[0.15em] uppercase text-white/30 mb-1">Flat rate</p>
+                            <p class="text-3xl md:text-4xl font-semibold tracking-tight">
+                                R70<span class="text-lg font-light text-white/30">.00</span>
+                            </p>
+                        </div>
+                        <button onclick="openModal('cv')" class="btn-primary px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                            Request
+                            <i data-lucide="arrow-right" class="w-4 h-4 card-arrow"></i>
+                        </button>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/5 flex items-center gap-4 flex-wrap">
+                        <div class="flex items-center gap-2 text-white/30 text-xs">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span>1–2 day delivery</span>
+                        </div>
+                        <div class="w-1 h-1 rounded-full bg-white/10"></div>
+                        <div class="flex items-center gap-2 text-white/30 text-xs">
+                            <i data-lucide="file-down" class="w-3.5 h-3.5"></i>
+                            <span>PDF & editable file</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beats CTA Banner -->
+    <section class="px-6 md:px-12 pb-20 max-w-[1400px] mx-auto">
+        <a href="beats.html" class="block service-card rounded-2xl p-8 md:p-10 bg-white/[0.03] backdrop-blur-sm relative overflow-hidden group no-underline">
+            <div class="absolute inset-0 bg-gradient-to-r from-white/[0.02] to-transparent"></div>
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-start gap-5">
+                    <div class="card-icon w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                        <i data-lucide="music" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-medium tracking-tight mb-1 text-white">Looking for beats?</h3>
+                        <p class="text-white/40 text-sm font-light max-w-md">Browse available beats, listen directly on the page, and contact producers via WhatsApp. Separate marketplace, same quality.</p>
+                    </div>
+                </div>
+                <div class="btn-outline px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2 shrink-0">
+                    Browse Beats
+                    <i data-lucide="arrow-right" class="w-4 h-4 card-arrow"></i>
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section class="px-6 md:px-12 pb-20 max-w-[1400px] mx-auto">
+        <div class="divider mb-16"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+            <div class="md:col-span-1">
+                <h2 class="text-xl font-medium tracking-tight mb-2">Not sure which you need?</h2>
+                <p class="text-white/40 text-sm font-light mb-6">Reach out and let's figure it out together.</p>
+                <button onclick="openModal('general')" class="btn-outline px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    Just chat
+                </button>
+            </div>
+            <div class="md:col-span-1">
+                <p class="text-[11px] font-medium tracking-[0.2em] uppercase text-white/30 mb-3">Call or WhatsApp</p>
+                <a href="tel:0610859002" class="text-2xl md:text-3xl font-medium tracking-tight phone-link text-white/80 hover:text-white inline-flex items-center gap-3 transition-colors">
+                    061 085 9002
+                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/30"></i>
+                </a>
+                <p class="text-white/30 text-xs mt-3">Tap to call on mobile</p>
+            </div>
+            <div class="md:col-span-1">
+                <p class="text-[11px] font-medium tracking-[0.2em] uppercase text-white/30 mb-3">Or save my number</p>
+                <button onclick="copyNumber()" id="copyBtn" class="btn-ghost px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-3 border border-white/10 w-fit">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <span id="copyText">Copy number</span>
+                </button>
+                <p class="text-white/30 text-xs mt-3">Saves to clipboard</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="px-6 md:px-12 pb-12 max-w-[1400px] mx-auto">
+        <div class="divider mb-10"></div>
+        <div class="rounded-xl bg-white/[0.02] border border-white/[0.05] p-6 md:p-8">
+            <div class="flex items-start gap-3 mb-4">
+                <i data-lucide="info" class="w-4 h-4 text-white/30 mt-0.5 shrink-0"></i>
+                <p class="text-[11px] font-medium tracking-[0.15em] uppercase text-white/30">Disclaimer</p>
+            </div>
+            <div class="space-y-3 text-white/25 text-xs font-light leading-relaxed pl-7">
+                <p>• Listed prices are estimates and may vary depending on the complexity and scope of the project. A final quote will be confirmed before any work begins.</p>
+                <p>• Delivery timeframes (1–7 days) are indicative and not guaranteed. Delays may occur based on workload, revision cycles, or response times.</p>
+                <p>• Submitting a request form does not constitute a binding agreement or contract. A service agreement is only formed once both parties explicitly agree to terms.</p>
+                <p>• Payment terms will be discussed and agreed upon individually. No work will begin without mutual agreement on price and scope.</p>
+                <p>• All content provided by the client (text, images, logos) must be owned or licensed by them. The service provider is not liable for third-party copyright claims.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="px-6 md:px-12 py-8 border-t border-white/5">
+        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4 flex-wrap">
+                <p class="text-white/20 text-xs">© 2026 All rights reserved.</p>
+                <span class="text-white/10 text-xs">·</span>
+                <a href="tel:0610859002" class="text-white/20 text-xs phone-link hover:text-white/40 transition-colors">061 085 9002</a>
+                <span class="text-white/10 text-xs">·</span>
+                <span class="text-white/20 text-xs">Prices in ZAR</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="beats.html" class="footer-link text-xs">Beats</a>
+                <span class="text-white/10 text-xs">·</span>
+                <button onclick="openCookieSettings()" class="footer-link text-xs">Cookie Settings</button>
+                <span class="text-white/10 text-xs">·</span>
+                <button onclick="openDisclaimerModal()" class="footer-link text-xs">Full Disclaimer</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" class="cookie-banner fixed bottom-0 left-0 right-0 z-[45] px-4 pb-4">
+        <div class="max-w-xl mx-auto bg-[#111] border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+            <div class="flex items-start gap-3 mb-4">
+                <i data-lucide="cookie" class="w-4 h-4 text-white/40 mt-0.5 shrink-0"></i>
+                <div>
+                    <p class="text-sm font-medium mb-1">This site uses cookies</p>
+                    <p class="text-white/40 text-xs font-light leading-relaxed">
+                        This website uses minimal, essential cookies only. No tracking, no analytics, no third-party cookies. The form on this site stores no data — requests are sent directly via WhatsApp. By continuing, you accept this use.
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="acceptCookies()" class="btn-primary px-5 py-2.5 rounded-lg text-xs font-medium">Accept</button>
+                <button onclick="openCookieSettings()" class="btn-ghost px-5 py-2.5 rounded-lg text-xs font-medium border border-white/10">Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Modal -->
+    <div id="modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center px-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        <div class="modal-content w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 relative max-h-[90vh] overflow-y-auto custom-scroll">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <i data-lucide="x" class="w-4 h-4 text-white/50"></i>
+            </button>
+            <div class="mb-6">
+                <p id="modal-label" class="text-[11px] font-medium tracking-[0.2em] uppercase text-white/40 mb-2"></p>
+                <h3 id="modal-title" class="text-xl font-medium tracking-tight"></h3>
+            </div>
+            <form id="requestForm" onsubmit="handleSubmit(event)" class="space-y-4">
+                <input type="hidden" id="formType" value="">
+                <div>
+                    <label class="block text-[11px] font-medium tracking-wider uppercase text-white/30 mb-2">Your Name</label>
+                    <input type="text" required placeholder="John Doe" class="form-input w-full px-4 py-3 rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-medium tracking-wider uppercase text-white/30 mb-2">Email Address</label>
+                    <input type="email" required placeholder="john@example.com" class="form-input w-full px-4 py-3 rounded-xl text-sm">
+                </div>
+                <div id="budgetField" class="hidden">
+                    <label class="block text-[11px] font-medium tracking-wider uppercase text-white/30 mb-2">Budget Range</label>
+                    <select class="form-input w-full px-4 py-3 rounded-xl text-sm appearance-none cursor-pointer">
+                        <option value="" class="bg-[#0a0a0a]">Select your budget</option>
+                        <option value="300-500" class="bg-[#0a0a0a]">R300 – R500</option>
+                        <option value="500-750" class="bg-[#0a0a0a]">R500 – R750</option>
+                        <option value="750-1000" class="bg-[#0a0a0a]">R750 – R1,000</option>
                     </select>
                 </div>
-            </div>
-            <div class="fg">
-                <label>WhatsApp Number</label>
-                <input type="tel" id="fWa" placeholder="e.g. 061 234 5678" required>
-            </div>
-            <div class="fg">
-                <label>Notes (optional)</label>
-                <textarea id="fNotes" placeholder="Key, BPM, license type..."></textarea>
-            </div>
-            <button type="submit" class="form-submit">Submit for Review</button>
-        </form>
+                <div>
+                    <label class="block text-[11px] font-medium tracking-wider uppercase text-white/30 mb-2">Details</label>
+                    <textarea required rows="3" placeholder="Tell me what you need..." class="form-input w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full py-3.5 rounded-xl text-sm font-medium mt-2">
+                    Submit Request
+                </button>
+                <p class="text-center text-white/20 text-xs pt-1">Or WhatsApp directly at <a href="https://wa.me/27610859002" class="underline hover:text-white/40 transition-colors">061 085 9002</a></p>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-// ═══════════════════════════════════════════════════════════════
-// FIREBASE — Replace with your own config
-//
-// 1. https://console.firebase.google.com → Create project (free)
-// 2. Realtime Database → Create Database → Start in test mode
-// 3. Project Settings → General → Your apps → Add Web app → Register
-// 4. Copy config below
-// 5. Rules: { "rules": { "beats": { ".read": true, ".write": true } } }
-// ═══════════════════════════════════════════════════════════════
+    <!-- Cookie Settings Modal -->
+    <div id="cookieModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center px-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        <div class="modal-content w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 relative max-h-[90vh] overflow-y-auto custom-scroll">
+            <button onclick="closeCookieSettings()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <i data-lucide="x" class="w-4 h-4 text-white/50"></i>
+            </button>
+            <div class="mb-6">
+                <h3 class="text-xl font-medium tracking-tight mb-1">Cookie Settings</h3>
+                <p class="text-white/40 text-xs font-light">This site is transparent about what it uses.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="rounded-xl border border-white/5 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-white/40"></i>
+                            <span class="text-sm font-medium">Essential</span>
+                        </div>
+                        <div class="w-8 h-4 rounded-full bg-white/20 flex items-center px-0.5 cursor-not-allowed">
+                            <div class="w-3 h-3 rounded-full bg-white"></div>
+                        </div>
+                    </div>
+                    <p class="text-white/30 text-xs font-light leading-relaxed pl-6">Required for the site to function. Stores your cookie preference so this banner doesn't reappear. Cannot be disabled.</p>
+                </div>
+                <div class="rounded-xl border border-white/5 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4 text-white/20"></i>
+                            <span class="text-sm font-medium text-white/40">Analytics</span>
+                        </div>
+                        <div class="w-8 h-4 rounded-full bg-white/5 flex items-center px-0.5">
+                            <div class="w-3 h-3 rounded-full bg-white/20"></div>
+                        </div>
+                    </div>
+                    <p class="text-white/20 text-xs font-light leading-relaxed pl-6">Not used. This site does not track visitors, collect analytics data, or use any third-party tracking scripts.</p>
+                </div>
+                <div class="rounded-xl border border-white/5 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="megaphone" class="w-4 h-4 text-white/20"></i>
+                            <span class="text-sm font-medium text-white/40">Marketing</span>
+                        </div>
+                        <div class="w-8 h-4 rounded-full bg-white/5 flex items-center px-0.5">
+                            <div class="w-3 h-3 rounded-full bg-white/20"></div>
+                        </div>
+                    </div>
+                    <p class="text-white/20 text-xs font-light leading-relaxed pl-6">Not used. No ads, retargeting, or marketing cookies are deployed on this site.</p>
+                </div>
+                <div class="rounded-xl border border-white/5 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="users" class="w-4 h-4 text-white/20"></i>
+                            <span class="text-sm font-medium text-white/40">Third-Party</span>
+                        </div>
+                        <div class="w-8 h-4 rounded-full bg-white/5 flex items-center px-0.5">
+                            <div class="w-3 h-3 rounded-full bg-white/20"></div>
+                        </div>
+                    </div>
+                    <p class="text-white/20 text-xs font-light leading-relaxed pl-6">Not used. Fonts are loaded from Google Fonts (which may log IP addresses per Google's privacy policy). No other third-party services are used.</p>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                <p class="text-white/20 text-[10px]">Only 1 cookie is set: <span class="text-white/30 font-mono">cookie_consent</span></p>
+                <button onclick="acceptCookies(); closeCookieSettings();" class="btn-primary px-5 py-2.5 rounded-lg text-xs font-medium">Got it</button>
+            </div>
+        </div>
+    </div>
 
-const firebaseConfig = {
-    apiKey: "AIzaSyEXAMPLE_REPLACE_ME",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "000000000000",
-    appId: "1:000000000000:web:0000000000000000"
-};
+    <!-- Full Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center px-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+        <div class="modal-content w-full max-w-lg bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 relative max-h-[90vh] overflow-y-auto custom-scroll">
+            <button onclick="closeDisclaimerModal()" class="absolute top-4 right-4 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <i data-lucide="x" class="w-4 h-4 text-white/50"></i>
+            </button>
+            <div class="mb-6">
+                <h3 class="text-xl font-medium tracking-tight mb-1">Full Disclaimer</h3>
+                <p class="text-white/40 text-xs font-light">Last updated: January 2026</p>
+            </div>
+            <div class="space-y-6 text-white/35 text-xs font-light leading-relaxed">
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">1. Pricing</h4>
+                    <p>All prices displayed on this website (R70.00 for CV design, R300.00 – R1,000.00 for website design) are estimates and starting points. The final price is determined after a detailed discussion of your requirements, including but not limited to: number of pages, complexity of design, functionality, content volume, and number of revision rounds. A formal quote will be provided before any work commences. Prices are subject to change without prior notice on this website.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">2. Delivery Timeframes</h4>
+                    <p>Stated delivery timeframes (1–2 days for CV, 3–7 days for websites) are approximate estimates based on typical project scopes. These are not guaranteed deadlines. Actual delivery depends on current workload, the completeness of information and assets provided by the client, response times during the revision process, and the complexity of the final request. No compensation will be offered for delays.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">3. No Binding Agreement</h4>
+                    <p>Submitting a request through this website's form or contacting via WhatsApp does not create a binding contract or service agreement. A formal agreement is only established when both parties have explicitly communicated and agreed upon the scope, price, and terms of the project. Either party may decline to proceed at any point prior to such agreement.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">4. Payment</h4>
+                    <p>Payment terms, methods, and schedules will be discussed and agreed upon individually for each project. No work will begin until payment terms are mutually accepted. The service provider reserves the right to request partial or full payment upfront. Refund policies, if any, will be agreed upon before work begins.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">5. Client-Provided Content</h4>
+                    <p>The client is solely responsible for ensuring that all content provided (text, images, logos, branding materials, personal information) is accurate, owned by them, or properly licensed. The service provider will not be held liable for any copyright infringement, intellectual property disputes, or inaccuracies arising from client-supplied content.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">6. Limitation of Liability</h4>
+                    <p>This website and its services are provided "as is" without warranties of any kind, either express or implied. The service provider shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to the use of this website or the services offered, including but not limited to loss of data, business interruption, or financial loss.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">7. Data & Privacy</h4>
+                    <p>This website does not collect, store, or process any personal data through its forms. The request form redirects information via WhatsApp and does not retain submissions. No analytics, tracking, or third-party data collection tools are used. The only cookie set is a local preference cookie to remember your cookie consent choice. Your WhatsApp messages are governed by WhatsApp's own privacy policy.</p>
+                </div>
+                <div>
+                    <h4 class="text-white/60 text-sm font-medium mb-2">8. External Links</h4>
+                    <p>This website may contain links to external services (e.g., WhatsApp, Spotify, SoundCloud). The service provider is not responsible for the content, privacy practices, or terms of any third-party websites or services.</p>
+                </div>
+            </div>
+            <button onclick="closeDisclaimerModal()" class="btn-primary w-full py-3.5 rounded-xl text-sm font-medium mt-8">Close</button>
+        </div>
+    </div>
 
-// ═══════════════════════════════════════════════════════════════
+    <!-- Toast -->
+    <div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] bg-white text-black px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2 shadow-2xl">
+        <i data-lucide="check-circle" class="w-4 h-4"></i>
+        <span id="toastMsg">Request sent successfully!</span>
+    </div>
 
-let db = null;
-let userId = null;
-const beatsGrid = document.getElementById('beatsGrid');
-const beatsInner = document.getElementById('beatsInner');
-const emptyState = document.getElementById('emptyState');
-const dbDot = document.getElementById('dbDot');
-const dbLabel = document.getElementById('dbLabel');
+    <script>
+        lucide.createIcons();
 
-// Dismiss domain notice
-const domainNotice = document.getElementById('domainNotice');
-document.getElementById('closeNotice').addEventListener('click', () => {
-    domainNotice.classList.add('hidden');
-    sessionStorage.setItem('dn_dismissed', '1');
-});
-if (sessionStorage.getItem('dn_dismissed')) domainNotice.classList.add('hidden');
-
-// Visitor ID
-function getUid() {
-    let id = localStorage.getItem('bx_uid');
-    if (!id) {
-        id = 'u_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
-        localStorage.setItem('bx_uid', id);
-    }
-    return id;
-}
-
-// Convert any Spotify/SoundCloud share link to embed URL
-function toEmbed(raw) {
-    let url = raw.trim();
-    if (url.includes('spotify.com') && !url.includes('/embed/')) {
-        url = url.split('?')[0].replace('open.spotify.com/', 'open.spotify.com/embed/') + '?theme=0';
-        return { url, platform: 'spotify' };
-    }
-    if (url.includes('spotify.com/embed/')) {
-        if (!url.includes('theme=0')) url += (url.includes('?') ? '&' : '?') + 'theme=0';
-        return { url, platform: 'spotify' };
-    }
-    if (url.includes('soundcloud.com') && !url.includes('w.soundcloud.com')) {
-        url = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(url) +
-              '&color=%23111111&auto_play=false&hide_related=true&show_comments=false' +
-              '&show_user=true&show_reposts=false&show_teaser=false&visual=false';
-        return { url, platform: 'soundcloud' };
-    }
-    if (url.includes('w.soundcloud.com')) return { url, platform: 'soundcloud' };
-    return { url, platform: 'other' };
-}
-
-function badgeHTML(platform) {
-    if (platform === 'spotify') return '<span class="bc-platform sp"><i class="fab fa-spotify"></i> Spotify</span>';
-    if (platform === 'soundcloud') return '<span class="bc-platform sc"><i class="fab fa-soundcloud"></i> SoundCloud</span>';
-    return '<span class="bc-platform other"><i class="fas fa-link"></i> Link</span>';
-}
-
-function escHtml(s) {
-    if (!s) return '';
-    const d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
-}
-
-// Build visual: image if available, otherwise embed iframe
-function buildVisual(beat) {
-    if (beat.imageUrl) {
-        return '<div class="bc-img"><img src="' + escHtml(beat.imageUrl) + '" alt="' + escHtml(beat.name) + '" loading="lazy"></div>';
-    }
-    if (beat.embedUrl) {
-        return '<div class="bc-embed">' + badgeHTML(beat.platform) +
-               '<iframe src="' + escHtml(beat.embedUrl) + '" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>';
-    }
-    return '<div class="bc-embed" style="display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:.78rem"><i class="fas fa-music" style="opacity:.3;margin-right:.5rem"></i>No preview</div>';
-}
-
-// Render a single beat card
-function renderCard(key, beat) {
-    const likes = getLikes();
-    const ld = likes[key] || { count: 0, liked: false };
-    const tags = beat.tags || [beat.genre || 'Beat'];
-    const card = document.createElement('div');
-    card.className = 'bc glass';
-    card.dataset.key = key;
-    card.innerHTML =
-        buildVisual(beat) +
-        '<div class="bc-info">' +
-            '<div class="bc-top">' +
-                '<div class="bc-name">' + escHtml(beat.name) + '</div>' +
-                '<div class="bc-price">' + escHtml(beat.price) + '</div>' +
-            '</div>' +
-            '<div class="bc-prod">prod. ' + escHtml(beat.producer) + '</div>' +
-            '<div class="bc-bottom">' +
-                '<div class="bc-tags">' + tags.map(function(t) { return '<span class="bc-tag">' + escHtml(t) + '</span>'; }).join('') + '</div>' +
-                '<div class="bc-actions">' +
-                    '<button class="bc-like ' + (ld.liked ? 'liked' : '') + '" data-key="' + key + '" aria-label="Like">' +
-                        '<i class="' + (ld.liked ? 'fas' : 'far') + ' fa-heart"></i>' +
-                        '<span>' + ld.count + '</span>' +
-                    '</button>' +
-                    '<a href="https://wa.me/' + beat.waNumber + '?text=Hi%2C%20I%27m%20interested%20in%20' + encodeURIComponent(beat.name) + '" target="_blank" class="bc-wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>' +
-                '</div>' +
-            '</div>' +
-        '</div>';
-    return card;
-}
-
-// ── LIKES (localStorage cache + Firebase source of truth) ──
-function getLikes() {
-    try { return JSON.parse(localStorage.getItem('bx_likes_cache')) || {}; } catch(e) { return {}; }
-}
-function cacheLike(key, data) {
-    var d = getLikes();
-    d[key] = data;
-    localStorage.setItem('bx_likes_cache', JSON.stringify(d));
-}
-
-function listenLikes(key) {
-    if (!db) return;
-    var ref = db.ref('beats/' + key);
-    ref.child('likes').on('value', function(snap) {
-        var count = snap.val() || 0;
-        var btn = document.querySelector('.bc-like[data-key="' + key + '"]');
-        if (btn) btn.querySelector('span').textContent = count;
-        var cached = getLikes()[key] || {};
-        cacheLike(key, Object.assign({}, cached, { count: count }));
-    });
-    ref.child('likedBy/' + userId).on('value', function(snap) {
-        var liked = snap.val() === true;
-        var btn = document.querySelector('.bc-like[data-key="' + key + '"]');
-        if (btn) {
-            btn.classList.toggle('liked', liked);
-            btn.querySelector('i').className = liked ? 'fas fa-heart' : 'far fa-heart';
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? match[2] : null;
         }
-        var cached = getLikes()[key] || {};
-        cacheLike(key, Object.assign({}, cached, { liked: liked }));
-    });
-}
-
-function toggleLike(key) {
-    if (!db) return;
-    var btn = document.querySelector('.bc-like[data-key="' + key + '"]');
-    if (!btn || btn.classList.contains('loading')) return;
-    btn.classList.add('loading');
-    var ref = db.ref('beats/' + key);
-    var userRef = ref.child('likedBy/' + userId);
-    userRef.once('value').then(function(snap) {
-        if (snap.val() === true) {
-            ref.child('likes').transaction(function(c) { return (c || 0) > 0 ? c - 1 : 0; });
-            userRef.remove();
-        } else {
-            ref.child('likes').transaction(function(c) { return (c || 0) + 1; });
-            userRef.set(true);
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
         }
-        btn.classList.remove('loading');
-    }).catch(function() {
-        btn.classList.remove('loading');
-        showToast('Could not save like');
-    });
-}
 
-beatsGrid.addEventListener('click', function(e) {
-    var btn = e.target.closest('.bc-like');
-    if (btn) toggleLike(btn.dataset.key);
-});
+        if (getCookie('cookie_consent')) {
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
 
-// ── SEED KYRO if database is empty ──
-function seedIfEmpty() {
-    if (!db) return;
-    db.ref('beats').orderByChild('approved').equalTo(true).limitToFirst(1).once('value').then(function(snap) {
-        if (!snap.exists()) {
-            db.ref('beats').push({
-                name: 'Kyro (Remix)',
-                producer: 'BlancoXCBeats',
-                price: 'DM for Price',
-                genre: 'Hip-Hop',
-                tags: ['Hip-Hop', 'Dark'],
-                waNumber: '27610859002',
-                imageUrl: '_images/lovely.jpg',
-                approved: true,
-                likes: 0,
-                notes: ''
+        function acceptCookies() {
+            setCookie('cookie_consent', 'accepted', 365);
+            const banner = document.getElementById('cookieBanner');
+            banner.classList.add('hiding');
+            setTimeout(() => { banner.style.display = 'none'; }, 400);
+        }
+
+        function openCookieSettings() {
+            document.getElementById('cookieModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCookieSettings() {
+            document.getElementById('cookieModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openModal(type) {
+            const modal = document.getElementById('modal');
+            const label = document.getElementById('modal-label');
+            const title = document.getElementById('modal-title');
+            const formType = document.getElementById('formType');
+            const budgetField = document.getElementById('budgetField');
+            formType.value = type;
+            if (type === 'website') {
+                label.textContent = 'R300 – R1,000';
+                title.textContent = 'Request a Website';
+                budgetField.classList.remove('hidden');
+            } else if (type === 'cv') {
+                label.textContent = 'R70.00 flat';
+                title.textContent = 'Request a CV';
+                budgetField.classList.add('hidden');
+            } else {
+                label.textContent = 'No commitment';
+                title.textContent = "Let's Chat";
+                budgetField.classList.add('hidden');
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('requestForm').reset();
+        }
+
+        function openDisclaimerModal() {
+            document.getElementById('disclaimerModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDisclaimerModal() {
+            document.getElementById('disclaimerModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+                document.body.style.overflow = '';
+            }
+        });
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            closeModal();
+            showToast('Request sent successfully!');
+        }
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        function copyNumber() {
+            navigator.clipboard.writeText('0610859002').then(() => {
+                const btn = document.getElementById('copyBtn');
+                const text = document.getElementById('copyText');
+                text.textContent = 'Copied!';
+                btn.classList.add('copy-flash');
+                showToast('Number copied to clipboard');
+                setTimeout(() => {
+                    text.textContent = 'Copy number';
+                    btn.classList.remove('copy-flash');
+                }, 2000);
             });
         }
-    });
-}
-
-// ── LOAD BEATS FROM FIREBASE ──
-function loadBeatsFromDb() {
-    if (!db) return;
-    db.ref('beats').orderByChild('approved').equalTo(true).on('value', function(snap) {
-        beatsGrid.innerHTML = '';
-        var data = snap.val();
-        if (!data) {
-            emptyState.style.display = 'block';
-            beatsInner.className = 'beats-sec-inner single';
-            return;
-        }
-        emptyState.style.display = 'none';
-        var keys = Object.keys(data);
-        beatsInner.className = keys.length > 1 ? 'beats-sec-inner multi' : 'beats-sec-inner single';
-        keys.forEach(function(key) {
-            beatsGrid.appendChild(renderCard(key, data[key]));
-            listenLikes(key);
-        });
-    });
-}
-
-// ── STATIC FALLBACK (no Firebase) ──
-function showStaticFallback() {
-    beatsGrid.innerHTML = '';
-    emptyState.style.display = 'none';
-    beatsInner.className = 'beats-sec-inner single';
-    var beat = {
-        name: 'Kyro (Remix)',
-        producer: 'BlancoXCBeats',
-        price: 'DM for Price',
-        genre: 'Hip-Hop',
-        tags: ['Hip-Hop', 'Dark'],
-        waNumber: '27610859002',
-        imageUrl: '_images/lovely.jpg'
-    };
-    beatsGrid.appendChild(renderCard('static_kyro', beat));
-    var btn = beatsGrid.querySelector('.bc-like');
-    if (btn) { btn.style.opacity = '.3'; btn.style.pointerEvents = 'none'; }
-}
-
-// ── INIT FIREBASE ──
-function initFirebase() {
-    try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        userId = getUid();
-        db.ref('.info/connected').on('value', function(snap) {
-            var connected = snap.val() === true;
-            dbDot.classList.toggle('ok', connected);
-            dbLabel.textContent = connected ? 'Connected' : 'Disconnected';
-        });
-        seedIfEmpty();
-        loadBeatsFromDb();
-    } catch (e) {
-        console.warn('Firebase not configured:', e.message);
-        dbLabel.textContent = 'Not configured';
-        showStaticFallback();
-    }
-}
-
-// ── SUBMIT FORM ──
-var submitModal = document.getElementById('submitModal');
-document.getElementById('openSubmit').addEventListener('click', function() { submitModal.classList.add('open'); });
-document.getElementById('closeSubmit').addEventListener('click', function() { submitModal.classList.remove('open'); });
-submitModal.addEventListener('click', function(e) { if (e.target === submitModal) submitModal.classList.remove('open'); });
-
-document.getElementById('submitForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var name = document.getElementById('fName').value.trim();
-    var producer = document.getElementById('fProducer').value.trim();
-    var rawLink = document.getElementById('fLink').value.trim();
-    var price = document.getElementById('fPrice').value.trim();
-    var genre = document.getElementById('fGenre').value;
-    var wa = document.getElementById('fWa').value.trim().replace(/\s/g, '');
-    var notes = document.getElementById('fNotes').value.trim();
-    if (!name || !producer || !rawLink || !price || !genre || !wa) return;
-
-    var embed = toEmbed(rawLink);
-    var beatData = {
-        name: name,
-        producer: producer,
-        price: price,
-        genre: genre,
-        tags: [genre],
-        waNumber: wa.startsWith('0') ? '27' + wa.slice(1) : wa,
-        embedUrl: embed.url,
-        platform: embed.platform,
-        approved: false,
-        likes: 0,
-        notes: notes,
-        submittedAt: Date.now()
-    };
-
-    if (db) {
-        db.ref('beats').push(beatData).then(function() {
-            submitModal.classList.remove('open');
-            e.target.reset();
-            showToast('Submitted! It will appear once approved.');
-        }).catch(function() {
-            showToast('Could not submit. Try again.');
-        });
-    } else {
-        submitModal.classList.remove('open');
-        e.target.reset();
-        showToast('Database not connected — beat not saved.');
-    }
-});
-
-// ── HERO WAVE ──
-var hWave = document.getElementById('hWave');
-for (var i = 0; i < 28; i++) {
-    var b = document.createElement('div');
-    b.className = 'wb';
-    b.style.animationDelay = (i * 0.055) + 's';
-    hWave.appendChild(b);
-}
-
-// ── NAV SCROLL ──
-window.addEventListener('scroll', function() {
-    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
-});
-
-// ── SCROLL REVEAL ──
-var ro = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('vis'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
-
-// ── TOAST ──
-function showToast(msg) {
-    var t = document.getElementById('toast');
-    document.getElementById('toastMsg').textContent = msg;
-    t.classList.add('show');
-    setTimeout(function() { t.classList.remove('show'); }, 3000);
-}
-
-// ── PARTICLES ──
-var pC = document.getElementById('ptc');
-var pX = pC.getContext('2d');
-var pts = [];
-function rP() { pC.width = innerWidth; pC.height = innerHeight; }
-function iP() {
-    rP();
-    pts = [];
-    var c = Math.min(28, Math.floor(innerWidth / 50));
-    for (var i = 0; i < c; i++) {
-        pts.push({
-            x: Math.random() * pC.width,
-            y: Math.random() * pC.height,
-            vx: (Math.random() - 0.5) * 0.16,
-            vy: (Math.random() - 0.5) * 0.16,
-            s: Math.random() * 1.1 + 0.4,
-            o: Math.random() * 0.16 + 0.03
-        });
-    }
-}
-function dP() {
-    pX.clearRect(0, 0, pC.width, pC.height);
-    for (var i = 0; i < pts.length; i++) {
-        var p = pts[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = pC.width;
-        if (p.x > pC.width) p.x = 0;
-        if (p.y < 0) p.y = pC.height;
-        if (p.y > pC.height) p.y = 0;
-        pX.beginPath();
-        pX.arc(p.x, p.y, Math.max(0.5, p.s), 0, Math.PI * 2);
-        pX.fillStyle = 'rgba(192,192,192,' + p.o + ')';
-        pX.fill();
-    }
-    for (var i = 0; i < pts.length; i++) {
-        for (var j = i + 1; j < pts.length; j++) {
-            var dx = pts[i].x - pts[j].x;
-            var dy = pts[i].y - pts[j].y;
-            var d = Math.sqrt(dx * dx + dy * dy);
-            if (d < 110) {
-                pX.beginPath();
-                pX.moveTo(pts[i].x, pts[i].y);
-                pX.lineTo(pts[j].x, pts[j].y);
-                pX.strokeStyle = 'rgba(192,192,192,' + ((1 - d / 110) * 0.03) + ')';
-                pX.lineWidth = 0.5;
-                pX.stroke();
-            }
-        }
-    }
-    requestAnimationFrame(dP);
-}
-window.addEventListener('resize', rP);
-
-// ── GO ──
-iP();
-dP();
-initFirebase();
-</script>
+    </script>
 </body>
 </html>
