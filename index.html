@@ -133,7 +133,6 @@
         .scroll-y::-webkit-scrollbar-track{background:transparent}
         .scroll-y::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
 
-        /* Readable contrast levels */
         .t-dim{color:#999}
         .t-label{color:#777}
         .t-muted{color:#aaa}
@@ -181,9 +180,9 @@
         </div>
     </div>
     <div class="flex items-center gap-4">
-        <a href="tel:0610859002" class="nav-link">
+        <a href="tel:0705583893" class="nav-link">
             <i data-lucide="phone" class="w-3 h-3"></i>
-            <span class="hidden md:inline">061 085 9002</span>
+            <span class="hidden md:inline">070 558 3893</span>
         </a>
         <div class="hidden sm:flex items-center gap-1.5">
             <div class="w-1.5 h-1.5 rounded-full bg-green-400" style="box-shadow:0 0 6px rgba(74,222,128,.5)"></div>
@@ -343,8 +342,8 @@
         </div>
         <div>
             <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-2">WhatsApp / Call</p>
-            <a href="tel:0610859002" class="text-xl sm:text-2xl font-bold tracking-tight t-sub hover:text-white inline-flex items-center gap-2 transition-colors">
-                061 085 9002
+            <a href="tel:0705583893" class="text-xl sm:text-2xl font-bold tracking-tight t-sub hover:text-white inline-flex items-center gap-2 transition-colors">
+                070 558 3893
                 <i data-lucide="arrow-up-right" class="w-4 h-4 t-dim"></i>
             </a>
             <p class="t-label text-[10px] mt-1.5">Tap to call on mobile</p>
@@ -365,7 +364,7 @@
         <div class="flex items-center gap-3 flex-wrap t-label text-[10px]">
             <span>© 2026</span>
             <span>·</span>
-            <a href="tel:0610859002" class="hover:text-white transition-colors">061 085 9002</a>
+            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a>
             <span>·</span>
             <span>ZAR</span>
         </div>
@@ -409,7 +408,7 @@
                 <textarea required rows="2" placeholder="What do you need?" class="fi resize-none"></textarea>
             </div>
             <button type="submit" class="card-btn w-full !py-3 mt-1">Submit Request</button>
-            <p class="text-center t-dim text-[10px]">Or WhatsApp <a href="https://wa.me/27610859002" class="underline hover:text-white transition-colors">061 085 9002</a></p>
+            <p class="text-center t-dim text-[10px]">Or WhatsApp <a href="https://wa.me/27705583893" class="underline hover:text-white transition-colors">070 558 3893</a></p>
         </form>
     </div>
 </div>
@@ -505,7 +504,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAllModals()});
 
 function handleSubmit(e){e.preventDefault();closeAllModals();toast('Request sent!')}
 function toast(m){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-function copyNum(){navigator.clipboard.writeText('0610859002').then(()=>{const x=document.getElementById('copyTxt');x.textContent='Copied!';toast('Copied');setTimeout(()=>x.textContent='Copy',1500)})}
+function copyNum(){navigator.clipboard.writeText('0705583893').then(()=>{const x=document.getElementById('copyTxt');x.textContent='Copied!';toast('Copied');setTimeout(()=>x.textContent='Copy',1500)})}
 </script>
 </body>
 </html>
