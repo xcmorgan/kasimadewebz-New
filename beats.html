@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <style>
-        :root{--bg:#050505;--chrome:#c0c0c0;--chrome-light:#e8e8e8;--chrome-dark:#6b6b6b;--glass-bg:rgba(192,192,192,.04);--glass-border:rgba(192,192,192,.1);--glass-hover:rgba(192,192,192,.08);--text:#e0e0e0;--text-muted:#555}
+        :root{--bg:#050505;--chrome:#c0c0c0;--chrome-light:#e8e8e8;--chrome-dark:#6b6b6b;--glass-bg:rgba(192,192,192,.04);--glass-border:rgba(192,192,192,.1);--glass-hover:rgba(192,192,192,.08);--text:#e0e0e0;--text-muted:#555;--warn:#d4a017;--warn-bg:rgba(212,160,23,.08);--warn-border:rgba(212,160,23,.15)}
         *{margin:0;padding:0;box-sizing:border-box}
         html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--chrome-dark) var(--bg)}
         body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
@@ -38,25 +38,68 @@
         .nav-wa{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1.1rem;border:1px solid var(--glass-border);border-radius:6px;color:var(--chrome-light);background:var(--glass-bg);text-decoration:none;font-size:.78rem;font-weight:400;transition:all .3s}
         .nav-wa:hover{background:var(--glass-hover);border-color:var(--chrome-dark)}
 
-        .hero{min-height:62vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:8rem 3rem 2.5rem}
-        .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(192,192,192,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(192,192,192,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 55% 50% at 50% 50%,black,transparent);-webkit-mask-image:radial-gradient(ellipse 55% 50% at 50% 50%,black,transparent)}
-        .hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(160px);opacity:.08}
-        .hg1{top:-180px;right:-80px;background:radial-gradient(circle,#888,transparent)}
-        .hg2{bottom:-180px;left:-80px;background:radial-gradient(circle,#666,transparent)}
-        .hero-content{position:relative;z-index:1;text-align:center;max-width:850px}
-        .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .9rem;border-radius:100px;font-size:.68rem;color:var(--chrome-dark);text-transform:uppercase;letter-spacing:2px;margin-bottom:1.8rem;animation:up .8s ease-out}
-        .hbd{width:5px;height:5px;background:var(--chrome);border-radius:50%;animation:pulse 2s ease-in-out infinite}
-        .hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,6.5vw,5rem);font-weight:700;line-height:.95;letter-spacing:-2.5px;margin-bottom:1.2rem;animation:up .8s ease-out .1s both}
-        .hero p{font-size:1rem;color:var(--text-muted);max-width:480px;margin:0 auto 2.2rem;font-weight:200;animation:up .8s ease-out .2s both}
-        .hero-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;animation:up .8s ease-out .3s both}
-        .btn-p{padding:.75rem 1.8rem;background:linear-gradient(135deg,#d0d0d0,#808080);color:#050505;border:none;border-radius:7px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
-        .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(192,192,192,.2)}
-        .btn-s{padding:.75rem 1.8rem;background:transparent;color:var(--chrome);border:1px solid var(--glass-border);border-radius:7px;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:400;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+        /* ── VIDEO HERO ── */
+        .hero-video{position:relative;width:100%;height:70vh;min-height:400px;max-height:780px;overflow:hidden;background:#000;margin-top:64px}
+        .hero-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+        .hero-video-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.2) 0%,rgba(5,5,5,.02) 30%,rgba(5,5,5,.45) 70%,rgba(5,5,5,.95) 100%);z-index:1;pointer-events:none}
+        .hero-video-sides{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,5,5,.55) 0%,transparent 12%,transparent 88%,rgba(5,5,5,.55) 100%)}
+        .hero-video-content{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:2rem 3rem 2.5rem}
+
+        .hvc-top-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+        .hvc-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .8rem;border-radius:100px;font-size:.62rem;color:var(--chrome-dark);text-transform:uppercase;letter-spacing:2px;animation:up .8s ease-out}
+        .hvc-badge .hbd{width:5px;height:5px;background:var(--chrome);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+
+        /* Volume button */
+        .vol-btn{position:relative;width:44px;height:44px;border-radius:50%;background:rgba(5,5,5,.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(192,192,192,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;color:var(--chrome-light);font-size:.9rem;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+        .vol-btn:hover{background:rgba(192,192,192,.12);border-color:rgba(192,192,192,.25)}
+        .vol-btn:active{transform:scale(.92)}
+        .vol-btn.unmuted{background:rgba(192,192,192,.12);border-color:rgba(192,192,192,.22)}
+        .vol-tooltip{position:absolute;bottom:calc(100% + 10px);right:50%;transform:translateX(50%) translateY(6px);padding:.35rem .65rem;border-radius:6px;font-size:.62rem;font-weight:400;white-space:nowrap;background:rgba(5,5,5,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(192,192,192,.1);color:var(--chrome-dark);opacity:0;pointer-events:none;transition:all .25s}
+        .vol-btn.unmuted .vol-tooltip{opacity:1;transform:translateX(50%) translateY(0)}
+        .vol-tooltip::after{content:'';position:absolute;top:100%;right:50%;transform:translateX(50%);border:5px solid transparent;border-top-color:rgba(5,5,5,.8)}
+
+        .hvc-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,4vw,2.8rem);font-weight:700;letter-spacing:-1.5px;line-height:1.05;color:var(--chrome-light);animation:up .8s ease-out .1s both}
+        .hvc-sub{font-size:.85rem;color:var(--chrome-dark);font-weight:200;margin-top:.4rem;animation:up .8s ease-out .2s both}
+
+        .pack-sec{position:relative;padding:4rem 3rem 5rem;overflow:hidden}
+        .pack-bg{position:absolute;inset:0;z-index:0}
+        .pack-bg img{width:100%;height:100%;object-fit:cover;display:block}
+        .pack-bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.93) 0%,rgba(5,5,5,.84) 40%,rgba(5,5,5,.9) 100%)}
+        .pack-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+        .pack-visual{position:relative}
+        .pack-artwork{position:relative;width:100%;max-width:420px;aspect-ratio:1;border-radius:18px;overflow:hidden;border:1px solid rgba(192,192,192,.12);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+        .pack-artwork img{width:100%;height:100%;object-fit:cover;display:block}
+        .pack-artwork-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(5,5,5,.5) 100%)}
+        .pack-artwork-badge{position:absolute;top:1.2rem;left:1.2rem;padding:.4rem .85rem;border-radius:6px;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;background:rgba(5,5,5,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(192,192,192,.1);color:var(--chrome-light)}
+        .pack-artwork-count{position:absolute;bottom:1.2rem;right:1.2rem;padding:.4rem .85rem;border-radius:6px;font-size:.7rem;font-weight:500;background:rgba(5,5,5,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(192,192,192,.08);color:var(--chrome-dark)}
+        .pack-artwork-float{position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;border-radius:14px;overflow:hidden;border:2px solid rgba(192,192,192,.1);box-shadow:0 15px 40px rgba(0,0,0,.5);animation:floaty 4s ease-in-out infinite}
+        .pack-artwork-float img{width:100%;height:100%;object-fit:cover}
+        @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+        .pack-info{display:flex;flex-direction:column;gap:1.5rem}
+        .pack-label{font-size:.62rem;text-transform:uppercase;letter-spacing:3.5px;color:var(--chrome-dark);display:flex;align-items:center;gap:.6rem}
+        .pack-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--glass-border),transparent)}
+        .pack-name{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:700;letter-spacing:-2px;line-height:1;color:var(--chrome-light)}
+        .pack-name-bracket{color:var(--chrome-dark);font-weight:300}
+        .pack-price-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+        .pack-price{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--chrome-light)}
+        .pack-price-note{font-size:.75rem;color:var(--text-muted);font-weight:200;padding:.3rem .7rem;border-radius:4px;background:rgba(192,192,192,.04);border:1px solid rgba(192,192,192,.06)}
+        .pack-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+        .pack-tag{padding:.3rem .65rem;border-radius:4px;font-size:.65rem;text-transform:uppercase;letter-spacing:1px;background:rgba(192,192,192,.06);color:var(--chrome-dark);border:1px solid rgba(192,192,192,.08);font-weight:400}
+        .pack-includes{display:flex;flex-direction:column;gap:.55rem}
+        .pack-inc-item{display:flex;align-items:center;gap:.65rem;font-size:.82rem;color:var(--text);font-weight:300}
+        .pack-inc-icon{width:28px;height:28px;min-width:28px;border-radius:7px;background:rgba(192,192,192,.06);border:1px solid rgba(192,192,192,.08);display:flex;align-items:center;justify-content:center;color:var(--chrome-dark);font-size:.65rem}
+        .pack-inc-item strong{color:var(--chrome-light);font-weight:600}
+        .pack-vst-warn{display:flex;align-items:flex-start;gap:.65rem;padding:.75rem .9rem;border-radius:8px;background:var(--warn-bg);border:1px solid var(--warn-border);font-size:.78rem;color:var(--warn);font-weight:300;line-height:1.5}
+        .pack-vst-warn i{margin-top:.15rem;font-size:.7rem;flex-shrink:0}
+        .pack-vst-warn strong{font-weight:600}
+        .pack-cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem}
+        .btn-p{padding:.85rem 2rem;background:linear-gradient(135deg,#d0d0d0,#808080);color:#050505;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.55rem}
+        .btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(192,192,192,.25)}
+        .btn-s{padding:.85rem 2rem;background:transparent;color:var(--chrome);border:1px solid var(--glass-border);border-radius:8px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:400;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.55rem}
         .btn-s:hover{background:var(--glass-hover);border-color:var(--chrome-dark);transform:translateY(-2px)}
-        .hero-wave{display:flex;align-items:center;justify-content:center;gap:2.5px;height:36px;margin-top:2rem;animation:up .8s ease-out .4s both}
-        .wb{width:2.5px;background:linear-gradient(180deg,var(--chrome-light),var(--chrome-dark));border-radius:3px;animation:wf 1.2s ease-in-out infinite}
-        @keyframes wf{0%,100%{height:4px;opacity:.3}50%{height:28px;opacity:1}}
-        @keyframes up{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+        .btn-wa{padding:.85rem 2rem;background:rgba(37,211,102,.1);color:#25d366;border:1px solid rgba(37,211,102,.2);border-radius:8px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.55rem}
+        .btn-wa:hover{background:rgba(37,211,102,.18);transform:translateY(-2px);box-shadow:0 12px 40px rgba(37,211,102,.15)}
 
         .beats-sec{padding:3rem 3rem 5rem}
         .beats-sec-inner{margin:0 auto;transition:max-width .4s ease}
@@ -119,12 +162,10 @@
         .hs-t h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--chrome-light);margin-bottom:.15rem}
         .hs-t p{font-size:.8rem;color:var(--text-muted);font-weight:200;line-height:1.6}
 
-        /* Services CTA banner */
-        .services-cta{padding:3rem;border-top:1px solid rgba(192,192,192,.04)}
+        .services-sec{padding:3rem;border-top:1px solid rgba(192,192,192,.04)}
         .services-cta-inner{max-width:1400px;margin:0 auto}
         .services-cta-link{display:block;border-radius:14px;padding:2rem 2.5rem;background:var(--glass-bg);border:1px solid var(--glass-border);text-decoration:none;transition:all .35s}
         .services-cta-link:hover{background:var(--glass-hover);border-color:rgba(192,192,192,.18);transform:translateY(-2px)}
-        .services-cta-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
 
         footer{border-top:1px solid rgba(192,192,192,.04);padding:2.5rem 3rem}
         .ft-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
@@ -161,18 +202,34 @@
         .reveal{opacity:0;transform:translateY(25px);transition:opacity .6s ease,transform .6s ease}
         .reveal.vis{opacity:1;transform:translateY(0)}
 
+        @keyframes up{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
         @media(max-width:900px){
             nav{padding:0 1.5rem}
             .domain-notice{padding:.5rem 1.5rem;font-size:.68rem}
-            .hero{padding:8rem 1.5rem 2rem}
+            .hero-video{height:55vh;min-height:320px}
+            .hero-video-content{padding:1.5rem 1.5rem 2rem}
+            .pack-sec{padding:3rem 1.5rem 4rem}
+            .pack-inner{grid-template-columns:1fr;gap:2.5rem}
+            .pack-artwork{max-width:320px;margin:0 auto}
+            .pack-artwork-float{display:none}
             .beats-sec{padding:2rem 1.5rem 4rem}
             .beats-sec-inner.single,.beats-sec-inner.multi{max-width:100%}
             .how-sec{padding:3rem 1.5rem}
             .how-inner{grid-template-columns:1fr;gap:2rem}
-            .services-cta{padding:2rem 1.5rem}
+            .services-sec{padding:2rem 1.5rem}
             footer{padding:2rem 1.5rem}
         }
         @media(max-width:600px){
+            .hero-video{height:50vh;min-height:280px}
+            .hero-video-content{padding:1.2rem 1.2rem 1.8rem}
+            .hvc-title{font-size:1.4rem;letter-spacing:-1px}
+            .hvc-sub{font-size:.78rem}
+            .hvc-top-row{margin-bottom:.7rem}
+            .vol-btn{width:40px;height:40px;font-size:.82rem}
+            .vol-tooltip{font-size:.58rem;padding:.28rem .55rem}
+            .pack-name{font-size:1.8rem}
+            .pack-price{font-size:1.5rem}
             .beats-grid{grid-template-columns:1fr}
             .bc-img{height:160px}
             .ft-inner{flex-direction:column;text-align:center}
@@ -181,6 +238,8 @@
             .modal{padding:1.8rem}
             .domain-notice .close-notice{right:.8rem}
             .nav-link.hide-mobile{display:none}
+            .pack-cta-row{flex-direction:column}
+            .pack-cta-row a,.pack-cta-row button{width:100%;justify-content:center}
         }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
@@ -191,38 +250,95 @@
 <div class="toast glass" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
 <div class="db-status" id="dbStatus"><span class="db-dot" id="dbDot"></span><span id="dbLabel">Not connected</span></div>
 
-<!-- DOMAIN NOTICE -->
 <div class="domain-notice" id="domainNotice">
     This website will soon move to <b>blancoxc.co.za</b> — bookmark it now.
     <button class="close-notice" id="closeNotice" aria-label="Dismiss"><i class="fas fa-xmark"></i></button>
 </div>
 
-<!-- NAV -->
 <nav id="nav">
     <div class="nav-inner">
         <a href="#" class="logo"><span class="logo-dot"></span>blancoxc.co.za</a>
         <div class="nav-right">
             <a href="index.html" class="nav-link hide-mobile"><i class="fas fa-briefcase" style="margin-right:.35rem;font-size:.65rem"></i>Services</a>
             <a href="beats.html" class="nav-link active"><i class="fas fa-headphones" style="margin-right:.35rem;font-size:.65rem"></i>Beats</a>
-            <a href="https://wa.me/27610859002" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> 061 085 9002</a>
+            <a href="https://wa.me/27705583893" target="_blank" class="nav-wa"><i class="fab fa-whatsapp"></i> 070 558 3893</a>
         </div>
     </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-glow hg1"></div>
-    <div class="hero-glow hg2"></div>
-    <div class="hero-content">
-        <div class="hero-badge glass"><span class="hbd"></span>Beat Marketplace</div>
-        <h1><span class="chrome-shine">Find</span> the beat.<br><span class="chrome-text">Contact</span> the producer.<br><span class="chrome-shine">Make it yours.</span></h1>
-        <p>Browse beats via Spotify and SoundCloud. Tap WhatsApp to deal directly with the producer.</p>
-        <div class="hero-btns">
-            <a href="#beats" class="btn-p"><i class="fas fa-headphones"></i> Browse Beats</a>
-            <a href="https://wa.me/27610859002?text=Hi%2C%20I%27m%20interested%20in%20a%20beat" target="_blank" class="btn-s"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+<!-- ═══ VIDEO HERO ═══ -->
+<section class="hero-video" id="heroVideo">
+    <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="greens.jpg">
+        <source src="BLANCOXCBEATS.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-video-sides"></div>
+    <div class="hero-video-content">
+        <div class="hvc-top-row">
+            <div class="hvc-badge glass"><span class="hbd"></span>BlancoXCBeats</div>
+            <button class="vol-btn" id="volBtn" aria-label="Toggle sound">
+                <i class="fas fa-volume-xmark" id="volIcon"></i>
+                <span class="vol-tooltip" id="volTip">Sound on — 25%</span>
+            </button>
         </div>
-        <div class="hero-wave" id="hWave"></div>
+        <h1 class="hvc-title chrome-shine">WHO SHE IS</h1>
+        <p class="hvc-sub">Beat Pack — 2 Beats — Trap / Hip-Hop / RnB / NeoSoul</p>
+    </div>
+</section>
+
+<!-- ═══ BEAT PACK SECTION ═══ -->
+<section class="pack-sec" id="pack">
+    <div class="pack-bg">
+        <img src="greens.jpg" alt="">
+        <div class="pack-bg-overlay"></div>
+    </div>
+    <div class="pack-inner">
+        <div class="pack-visual reveal">
+            <div class="pack-artwork">
+                <img src="whosheis.jpg" alt="WHO SHE IS Beat Pack">
+                <div class="pack-artwork-overlay"></div>
+                <div class="pack-artwork-badge">Beat Pack</div>
+                <div class="pack-artwork-count"><i class="fas fa-music" style="margin-right:.3rem;font-size:.6rem"></i> 2 Beats</div>
+            </div>
+            <div class="pack-artwork-float">
+                <img src="whosheis.jpg" alt="">
+            </div>
+        </div>
+        <div class="pack-info reveal">
+            <div class="pack-label">Featured Release</div>
+            <h2 class="pack-name"><span class="pack-name-bracket">[</span>WHO SHE IS<span class="pack-name-bracket">]</span></h2>
+            <div class="pack-price-row">
+                <div class="pack-price">R50</div>
+                <div class="pack-price-note">Buy Beat Pack = R50</div>
+            </div>
+            <div class="pack-tags">
+                <span class="pack-tag">Trap</span>
+                <span class="pack-tag">Hip-Hop</span>
+                <span class="pack-tag">RnB</span>
+                <span class="pack-tag">NeoSoul</span>
+            </div>
+            <div class="pack-includes">
+                <div class="pack-inc-item">
+                    <div class="pack-inc-icon"><i class="fas fa-music"></i></div>
+                    <span><strong>2 Beats</strong> — Trap, Hip-Hop, RnB, NeoSoul</span>
+                </div>
+                <div class="pack-inc-item">
+                    <div class="pack-inc-icon"><i class="fas fa-box-open"></i></div>
+                    <span><strong>Sample Packs</strong> included</span>
+                </div>
+                <div class="pack-inc-item">
+                    <div class="pack-inc-icon"><i class="fas fa-file-audio"></i></div>
+                    <span><strong>FL Studio v26 Project</strong> files</span>
+                </div>
+            </div>
+            <div class="pack-vst-warn">
+                <i class="fas fa-triangle-exclamation"></i>
+                <span><strong>VSTs required but not included:</strong> Crystaline &amp; SKY KEYS — you'll need these installed to open the project files properly.</span>
+            </div>
+            <div class="pack-cta-row">
+                <a href="https://wa.me/27705583893?text=Hi%2C%20I%20want%20to%20buy%20the%20WHO%20SHE%20IS%20beat%20pack%20for%20R50" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> Buy on WhatsApp — R50</a>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -231,7 +347,7 @@
     <div class="beats-sec-inner single" id="beatsInner">
         <div class="sec-head reveal">
             <span class="sec-label">Available Now</span>
-            <h2 class="sec-title chrome-text">Beats</h2>
+            <h2 class="sec-title chrome-text">More Beats</h2>
             <p class="sec-desc">Listen below, then tap WhatsApp to contact the producer directly.</p>
         </div>
         <div class="beats-grid" id="beatsGrid"></div>
@@ -254,9 +370,9 @@
             <p class="sec-desc" style="margin-top:.6rem">No accounts, no fees, no waiting.</p>
         </div>
         <div class="how-steps">
-            <div class="hs reveal"><div class="hs-n">01</div><div class="hs-t"><h3>Listen</h3><p>Hit play on the embedded player. If it fits, move on.</p></div></div>
-            <div class="hs reveal"><div class="hs-n">02</div><div class="hs-t"><h3>Reach Out</h3><p>Tap the WhatsApp icon. It opens a chat with the producer, pre-filled with the beat name.</p></div></div>
-            <div class="hs reveal"><div class="hs-n">03</div><div class="hs-t"><h3>Deal Directly</h3><p>Discuss price, license, and payment one-on-one. Receive your files straight from the producer.</p></div></div>
+            <div class="hs reveal"><div class="hs-n">01</div><div class="hs-t"><h3>Listen</h3><p>Hit play on the video or embedded player. If it fits, move on.</p></div></div>
+            <div class="hs reveal"><div class="hs-n">02</div><div class="hs-t"><h3>Reach Out</h3><p>Tap the WhatsApp button. It opens a chat with the producer, pre-filled with the beat pack name.</p></div></div>
+            <div class="hs reveal"><div class="hs-n">03</div><div class="hs-t"><h3>Get Your Files</h3><p>Pay R50 via WhatsApp, receive the beats, sample packs, and FL Studio project files directly.</p></div></div>
         </div>
     </div>
 </section>
@@ -288,7 +404,7 @@
     <div class="ft-inner">
         <div class="ft-left">
             <a href="#" class="logo"><span class="logo-dot"></span>blancoxc.co.za</a>
-            <div class="ft-wa"><a href="https://wa.me/27610859002" target="_blank"><i class="fab fa-whatsapp"></i> 061 085 9002</a></div>
+            <div class="ft-wa"><a href="https://wa.me/27705583893" target="_blank"><i class="fab fa-whatsapp"></i> 070 558 3893</a></div>
         </div>
         <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap">
             <div class="ft-links">
@@ -354,16 +470,6 @@
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// FIREBASE — Replace with your own config
-//
-// 1. https://console.firebase.google.com → Create project (free)
-// 2. Realtime Database → Create Database → Start in test mode
-// 3. Project Settings → General → Your apps → Add Web app → Register
-// 4. Copy config below
-// 5. Rules: { "rules": { "beats": { ".read": true, ".write": true } } }
-// ═══════════════════════════════════════════════════════════════
-
 const firebaseConfig = {
     apiKey: "AIzaSyEXAMPLE_REPLACE_ME",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -374,8 +480,6 @@ const firebaseConfig = {
     appId: "1:000000000000:web:0000000000000000"
 };
 
-// ═══════════════════════════════════════════════════════════════
-
 let db = null;
 let userId = null;
 const beatsGrid = document.getElementById('beatsGrid');
@@ -384,15 +488,71 @@ const emptyState = document.getElementById('emptyState');
 const dbDot = document.getElementById('dbDot');
 const dbLabel = document.getElementById('dbLabel');
 
-// Dismiss domain notice
+/* ══════════════════════════════════════
+   VIDEO — autoplay muted, volume toggle
+   ══════════════════════════════════════ */
+const heroVid = document.getElementById('heroVid');
+const volBtn  = document.getElementById('volBtn');
+const volIcon = document.getElementById('volIcon');
+const volTip  = document.getElementById('volTip');
+let isMuted = true;
+
+// Attempt autoplay on load (muted is required for mobile browsers)
+function tryAutoplay() {
+    heroVid.play().catch(function() {
+        // Autoplay blocked — will play on first user interaction
+        document.addEventListener('click', function once() {
+            heroVid.play().catch(function(){});
+            document.removeEventListener('click', once);
+        }, { once: true });
+    });
+}
+tryAutoplay();
+
+// Volume button: tap to unmute at 25%, tap again to mute
+volBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (isMuted) {
+        heroVid.muted = false;
+        heroVid.volume = 0.25;
+        isMuted = false;
+        volIcon.className = 'fas fa-volume-low';
+        volBtn.classList.add('unmuted');
+        volTip.textContent = 'Sound on — 25%';
+        // Auto-hide tooltip after 2s
+        clearTimeout(volBtn._tipTimer);
+        volBtn._tipTimer = setTimeout(function() {
+            volBtn.classList.remove('unmuted');
+        }, 2000);
+    } else {
+        heroVid.muted = true;
+        isMuted = true;
+        volIcon.className = 'fas fa-volume-xmark';
+        volBtn.classList.remove('unmuted');
+    }
+});
+
+// If video ends for any reason, restart it
+heroVid.addEventListener('ended', function() {
+    heroVid.play().catch(function(){});
+});
+
+// iOS Safari sometimes pauses video when scrolling back into view
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && heroVid.paused) {
+        heroVid.play().catch(function(){});
+    }
+});
+
+/* ══════════════════════════════════════ */
+
 const domainNotice = document.getElementById('domainNotice');
-document.getElementById('closeNotice').addEventListener('click', () => {
+document.getElementById('closeNotice').addEventListener('click', function() {
     domainNotice.classList.add('hidden');
     sessionStorage.setItem('dn_dismissed', '1');
 });
 if (sessionStorage.getItem('dn_dismissed')) domainNotice.classList.add('hidden');
 
-// Visitor ID
 function getUid() {
     let id = localStorage.getItem('bx_uid');
     if (!id) {
@@ -402,7 +562,6 @@ function getUid() {
     return id;
 }
 
-// Convert any Spotify/SoundCloud share link to embed URL
 function toEmbed(raw) {
     let url = raw.trim();
     if (url.includes('spotify.com') && !url.includes('/embed/')) {
@@ -476,7 +635,6 @@ function renderCard(key, beat) {
     return card;
 }
 
-// ── LIKES ──
 function getLikes() {
     try { return JSON.parse(localStorage.getItem('bx_likes_cache')) || {}; } catch(e) { return {}; }
 }
@@ -535,7 +693,6 @@ beatsGrid.addEventListener('click', function(e) {
     if (btn) toggleLike(btn.dataset.key);
 });
 
-// ── SEED KYRO ──
 function seedIfEmpty() {
     if (!db) return;
     db.ref('beats').orderByChild('approved').equalTo(true).limitToFirst(1).once('value').then(function(snap) {
@@ -546,7 +703,7 @@ function seedIfEmpty() {
                 price: 'DM for Price',
                 genre: 'Hip-Hop',
                 tags: ['Hip-Hop', 'Dark'],
-                waNumber: '27610859002',
+                waNumber: '27705583893',
                 imageUrl: '_images/lovely.jpg',
                 approved: true,
                 likes: 0,
@@ -556,7 +713,6 @@ function seedIfEmpty() {
     });
 }
 
-// ── LOAD BEATS ──
 function loadBeatsFromDb() {
     if (!db) return;
     db.ref('beats').orderByChild('approved').equalTo(true).on('value', function(snap) {
@@ -577,7 +733,6 @@ function loadBeatsFromDb() {
     });
 }
 
-// ── STATIC FALLBACK ──
 function showStaticFallback() {
     beatsGrid.innerHTML = '';
     emptyState.style.display = 'none';
@@ -588,7 +743,7 @@ function showStaticFallback() {
         price: 'DM for Price',
         genre: 'Hip-Hop',
         tags: ['Hip-Hop', 'Dark'],
-        waNumber: '27610859002',
+        waNumber: '27705583893',
         imageUrl: '_images/lovely.jpg'
     };
     beatsGrid.appendChild(renderCard('static_kyro', beat));
@@ -596,7 +751,6 @@ function showStaticFallback() {
     if (btn) { btn.style.opacity = '.3'; btn.style.pointerEvents = 'none'; }
 }
 
-// ── INIT FIREBASE ──
 function initFirebase() {
     try {
         firebase.initializeApp(firebaseConfig);
@@ -616,7 +770,6 @@ function initFirebase() {
     }
 }
 
-// ── SUBMIT FORM ──
 var submitModal = document.getElementById('submitModal');
 document.getElementById('openSubmit').addEventListener('click', function() { submitModal.classList.add('open'); });
 document.getElementById('closeSubmit').addEventListener('click', function() { submitModal.classList.remove('open'); });
@@ -664,27 +817,15 @@ document.getElementById('submitForm').addEventListener('submit', function(e) {
     }
 });
 
-// ── HERO WAVE ──
-var hWave = document.getElementById('hWave');
-for (var i = 0; i < 28; i++) {
-    var b = document.createElement('div');
-    b.className = 'wb';
-    b.style.animationDelay = (i * 0.055) + 's';
-    hWave.appendChild(b);
-}
-
-// ── NAV SCROLL ──
 window.addEventListener('scroll', function() {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ── SCROLL REVEAL ──
 var ro = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('vis'); });
 }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
 
-// ── TOAST ──
 function showToast(msg) {
     var t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
@@ -692,7 +833,6 @@ function showToast(msg) {
     setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
 
-// ── PARTICLES ──
 var pC = document.getElementById('ptc');
 var pX = pC.getContext('2d');
 var pts = [];
@@ -746,7 +886,6 @@ function dP() {
 }
 window.addEventListener('resize', rP);
 
-// ── GO ──
 iP();
 dP();
 initFirebase();
