@@ -173,6 +173,10 @@
         </a>
         <div class="flex items-center gap-4 sm:gap-5">
             <a href="index.html" class="nav-link active">Services</a>
+            <a href="software.html" class="nav-link">
+                <i data-lucide="code" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Software</span>
+            </a>
             <a href="beats.html" class="nav-link">
                 <i data-lucide="music" class="w-3 h-3"></i>
                 <span class="hidden sm:inline">Beats</span>
@@ -200,7 +204,7 @@
     </h1>
     <div class="mt-6 flex items-center gap-3 anim-3">
         <div class="w-8 h-px bg-white/20"></div>
-        <p class="t-muted text-sm font-light">Two services.</p>
+        <p class="t-muted text-sm font-light">Three services.</p>
     </div>
     <div class="mt-10 grid grid-cols-3 gap-4 max-w-md anim-4">
         <div>
@@ -212,7 +216,7 @@
             <p class="text-[10px] t-label mt-0.5 uppercase tracking-wider font-medium">Day delivery</p>
         </div>
         <div>
-            <p class="text-2xl sm:text-3xl font-bold stat-num" style="animation-delay:.7s">2</p>
+            <p class="text-2xl sm:text-3xl font-bold stat-num" style="animation-delay:.7s">3</p>
             <p class="text-[10px] t-label mt-0.5 uppercase tracking-wider font-medium">Services</p>
         </div>
     </div>
@@ -225,6 +229,8 @@
         <span class="t-label">✦</span>
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">CV Design</span>
         <span class="t-label">✦</span>
+        <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">Software</span>
+        <span class="t-label">✦</span>
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">From R70</span>
         <span class="t-label">✦</span>
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">Fast Turnaround</span>
@@ -234,6 +240,8 @@
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">Websites</span>
         <span class="t-label">✦</span>
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">CV Design</span>
+        <span class="t-label">✦</span>
+        <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">Software</span>
         <span class="t-label">✦</span>
         <span class="mx-6 text-[10px] font-semibold tracking-[.25em] uppercase t-dim">From R70</span>
         <span class="t-label">✦</span>
@@ -245,7 +253,9 @@
 
 <!-- Cards -->
 <section class="px-5 sm:px-8 py-12 sm:py-16 max-w-[1200px] mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        
+        <!-- Website Card -->
         <div class="card p-5 sm:p-6 anim-3">
             <div class="flex items-start justify-between mb-4">
                 <div class="card-icon w-10 h-10 rounded-xl bg-black/8 flex items-center justify-center">
@@ -276,6 +286,7 @@
             </div>
         </div>
 
+        <!-- CV Card -->
         <div class="card p-5 sm:p-6 anim-4">
             <div class="flex items-start justify-between mb-4">
                 <div class="card-icon w-10 h-10 rounded-xl bg-black/8 flex items-center justify-center">
@@ -305,27 +316,30 @@
                 <span class="flex items-center gap-1"><i data-lucide="file-down" class="w-3 h-3"></i>PDF + editable</span>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- Beats banner -->
-<section class="px-5 sm:px-8 pb-12 sm:pb-16 max-w-[1200px] mx-auto">
-    <a href="beats.html" class="block card p-5 sm:p-6 group no-underline">
-        <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <div class="card-icon w-10 h-10 rounded-xl bg-black/8 flex items-center justify-center shrink-0">
-                    <i data-lucide="music" class="w-[18px] h-[18px]"></i>
+        <!-- Software Card -->
+        <a href="software.html" class="card p-5 sm:p-6 anim-4 block no-underline sm:col-span-2 lg:col-span-1">
+            <div class="flex items-start justify-between mb-4">
+                <div class="card-icon w-10 h-10 rounded-xl bg-black/8 flex items-center justify-center">
+                    <i data-lucide="monitor" class="w-[18px] h-[18px]"></i>
                 </div>
-                <div>
-                    <h3 class="text-sm sm:text-base font-bold tracking-tight" style="color:#111">Looking for beats?</h3>
-                    <p class="text-xs font-light mt-0.5" style="color:#666">Browse, listen, deal direct via WhatsApp.</p>
+                <span class="px-2 py-0.5 rounded-md bg-black/6 text-[9px] font-semibold tracking-wider uppercase" style="color:#777">Windows</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold tracking-tight mb-1" style="color:#111">My Software</h3>
+            <p class="text-sm font-light leading-relaxed mb-5" style="color:#666">Test out my built desktop applications. Clean utility, no bloat.</p>
+            <div class="h-px bg-black/8 mb-4"></div>
+            <div class="flex items-end justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <img src="software.jpg" alt="Software" class="w-10 h-10 rounded-lg object-cover shadow-sm border border-black/10">
+                    <span class="text-xs font-medium" style="color:#888">View Projects</span>
+                </div>
+                <div class="opacity-40 group-hover:opacity-100 transition-opacity">
+                    <i data-lucide="arrow-right" class="w-4 h-4 card-arrow" style="color:#888"></i>
                 </div>
             </div>
-            <div class="opacity-40 group-hover:opacity-100 transition-opacity shrink-0">
-                <i data-lucide="arrow-right" class="w-4 h-4" style="color:#888"></i>
-            </div>
-        </div>
-    </a>
+        </a>
+
+    </div>
 </section>
 
 <!-- Contact -->
@@ -370,6 +384,7 @@
         </div>
         <div class="flex items-center gap-3">
             <a href="beats.html" class="flink">Beats</a>
+            <a href="software.html" class="flink">Software</a>
             <button onclick="openModal('cookies')" class="flink">Cookies</button>
             <button onclick="openModal('disclaimer')" class="flink">Disclaimer</button>
         </div>
