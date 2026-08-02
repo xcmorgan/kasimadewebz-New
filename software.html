@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Software</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Inter',sans-serif;
+            color:#fff;
+            overflow-x:hidden;
+            background:#09090b;
+            background-image:url('greens.jpg');
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+            background-repeat:no-repeat;
+        }
+        body::before{
+            content:'';position:fixed;inset:0;z-index:0;
+            background:rgba(0,0,0,.78);
+            pointer-events:none;
+        }
+        body>*{position:relative;z-index:1}
+        ::selection{background:#fff;color:#000}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+        .anim-1{animation:fadeUp .7s ease-out forwards}
+        .anim-2{animation:fadeUp .7s ease-out .12s forwards;opacity:0}
+        .anim-3{animation:fadeUp .7s ease-out .24s forwards;opacity:0}
+
+        .nav-link{
+            color:#999;text-decoration:none;font-size:12px;
+            font-weight:500;letter-spacing:.04em;transition:color .25s;
+            display:inline-flex;align-items:center;gap:5px;
+        }
+        .nav-link:hover,.nav-link.active{color:#fff}
+
+        /* Dark Glassmorphism Card */
+        .glass-card{
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(.4,0,.2,1);
+        }
+        .glass-card:hover{
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-btn{
+            background:#fff;color:#000;border:none;border-radius:10px;
+            padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;
+            transition:all .3s ease;display:inline-flex;align-items:center;gap:8px;
+            font-family:inherit;
+        }
+        .card-btn:hover{background:#e5e7eb;transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,255,255,.1)}
+
+        .ghost-btn{
+            background:transparent;color:#999;border:1px solid rgba(255,255,255,.2);
+            padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;
+            transition:all .3s ease;font-family:inherit;border-radius:10px;
+            display:inline-flex;align-items:center;gap:6px;
+        }
+        .ghost-btn:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);color:#fff}
+
+        .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent)}
+        
+        .t-dim{color:#999}
+        .t-label{color:#777}
+        .t-sub{color:#bbb}
+
+        .flink{
+            color:#888;text-decoration:none;font-size:11px;
+            transition:color .25s;text-underline-offset:2px;
+            text-decoration:underline;text-decoration-color:rgba(255,255,255,.1);
+        }
+        .flink:hover{color:#ccc;text-decoration-color:rgba(255,255,255,.25)}
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="fixed top-0 left-0 right-0 z-40 px-5 sm:px-8 py-4 flex items-center justify-between" style="backdrop-filter:blur(16px);background:rgba(9,9,11,.5)">
+    <div class="flex items-center gap-5 sm:gap-7">
+        <a href="index.html" class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-black"></div>
+            </div>
+        </a>
+        <div class="flex items-center gap-4 sm:gap-5">
+            <a href="index.html" class="nav-link">Services</a>
+            <a href="software.html" class="nav-link active">
+                <i data-lucide="code" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Software</span>
+            </a>
+            <a href="beats.html" class="nav-link">
+                <i data-lucide="music" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Beats</span>
+            </a>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="tel:0705583893" class="nav-link">
+            <i data-lucide="phone" class="w-3 h-3"></i>
+            <span class="hidden md:inline">070 558 3893</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="pt-28 sm:pt-32 pb-10 sm:pb-14 px-5 sm:px-8 max-w-[1200px] mx-auto">
+    <p class="text-[10px] font-semibold tracking-[.2em] uppercase t-label mb-5 anim-1">Utility / Tools</p>
+    <h1 class="text-[clamp(2.2rem,7vw,4.5rem)] font-extrabold leading-[.92] tracking-tight anim-2">
+        My Software,<br>
+        <span class="t-dim">built clean.</span>
+    </h1>
+    <div class="mt-6 flex items-center gap-3 anim-3">
+        <div class="w-8 h-px bg-white/20"></div>
+        <p class="t-dim text-sm font-light">Test it out.</p>
+    </div>
+</section>
+
+<div class="divider max-w-[1200px] mx-auto"></div>
+
+<!-- Projects Grid -->
+<section class="px-5 sm:px-8 py-12 sm:py-16 max-w-[1200px] mx-auto">
+    
+    <!-- Project 1: PCS -->
+    <div class="glass-card p-6 sm:p-8 anim-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            
+            <!-- Image Side -->
+            <div class="md:col-span-1">
+                <div class="aspect-square rounded-xl overflow-hidden border border-white/10 bg-black/30">
+                    <img src="PCS.jpg" alt="PCS Software" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- Content Side -->
+            <div class="md:col-span-2 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 rounded-lg bg-white/10 text-[10px] font-bold tracking-wider uppercase">Project 1</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] font-medium tracking-wider uppercase t-dim flex items-center gap-1.5">
+                            <i data-lucide="monitor" class="w-3 h-3"></i> Windows
+                        </span>
+                    </div>
+                    
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">PCS</h2>
+                    <p class="text-sm font-medium t-sub mb-4">Personal Contacts Storage</p>
+                    
+                    <p class="text-sm font-light leading-relaxed t-dim mb-6 max-w-xl">
+                        A lightweight, secure offline desktop application to keep your contacts organized. No servers, no clouds—your data stays strictly on your machine. Features a custom 4-digit PIN lock to keep snoopers out, real-time search filtering, and one-click exports to text files. Built for utility, zero bloat.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                        <div>
+                            <p class="text-[9px] font-semibold tracking-wider uppercase t-label mb-1">Security</p>
+                            <p class="text-sm font-semibold flex items-center gap-1.5"><i data-lucide="lock" class="w-3.5 h-3.5 t-dim"></i> PIN Lock</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-semibold tracking-wider uppercase t-label mb-1">Storage</p>
+                            <p class="text-sm font-semibold flex items-center gap-1.5"><i data-lucide="hard-drive" class="w-3.5 h-3.5 t-dim"></i> 100% Local</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-semibold tracking-wider uppercase t-label mb-1">Format</p>
+                            <p class="text-sm font-semibold flex items-center gap-1.5"><i data-lucide="file-down" class="w-3.5 h-3.5 t-dim"></i> .TXT Export</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-semibold tracking-wider uppercase t-label mb-1">Platform</p>
+                            <p class="text-sm font-semibold flex items-center gap-1.5"><i data-lucide="monitor" class="w-3.5 h-3.5 t-dim"></i> Windows</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <a href="https://www.mediafire.com/file/btqtgtxwbdn50kh/mysetup.exe/file" target="_blank" class="card-btn">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download for Windows
+                    </a>
+                    <span class="text-[10px] t-label mt-1 sm:mt-0">v1.0 · Installed via Inno Setup</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer class="px-5 sm:px-8 py-6 border-t border-white/[.08]">
+    <div class="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3 flex-wrap t-label text-[10px]">
+            <span>© 2026</span>
+            <span>·</span>
+            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a>
+            <span>·</span>
+            <span>ZAR</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="index.html" class="flink">Services</a>
+            <a href="beats.html" class="flink">Beats</a>
+            <a href="software.html" class="flink">Software</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    lucide.createIcons();
+</script>
+</body>
+</html>
