@@ -47,7 +47,6 @@
         .anim-2{animation:fadeUp .7s ease-out .12s forwards;opacity:0}
         .anim-3{animation:fadeUp .7s ease-out .24s forwards;opacity:0}
         .anim-4{animation:fadeUp .7s ease-out .36s forwards;opacity:0}
-        .anim-5{animation:fadeUp .7s ease-out .48s forwards;opacity:0}
 
         .reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.4,0,.2,1)}
         .reveal.visible{opacity:1;transform:translateY(0)}
@@ -75,7 +74,7 @@
 
         .spec-card{
             background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-            backdrop-filter:blur(16px);border-radius:14px;padding:16px;
+            backdrop-filter:blur(16px);border-radius:12px;padding:14px;
             transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
         }
         .spec-card::before{
@@ -86,47 +85,46 @@
         .spec-card:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
         .spec-card:hover::before{opacity:1}
 
-        /* Thumbnail scroll strip */
         .thumb-strip{
-            display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;
+            display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;
             -webkit-overflow-scrolling:touch;scrollbar-width:none;
-            padding-bottom:4px;
+            padding-bottom:2px;
         }
         .thumb-strip::-webkit-scrollbar{display:none}
 
         .gallery-thumb{
-            border-radius:10px;overflow:hidden;cursor:pointer;
-            border:2px solid transparent;transition:all .3s ease;position:relative;
+            border-radius:8px;overflow:hidden;cursor:pointer;
+            border:2px solid transparent;transition:all .25s ease;position:relative;
             flex-shrink:0;
         }
         .gallery-thumb::after{
             content:'';position:absolute;inset:0;
-            background:rgba(0,0,0,.3);transition:all .3s ease;
+            background:rgba(0,0,0,.25);transition:all .25s ease;
         }
-        .gallery-thumb:hover::after{background:rgba(0,0,0,.1)}
+        .gallery-thumb:hover::after{background:rgba(0,0,0,.08)}
         .gallery-thumb.active{border-color:rgba(255,255,255,.5)}
         .gallery-thumb.active::after{background:transparent}
-        .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+        .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}
         .gallery-thumb:hover img{transform:scale(1.05)}
 
-        /* Desktop: grid thumbs */
         @media(min-width:640px){
             .thumb-strip{
                 display:grid;grid-template-columns:repeat(9,1fr);
-                overflow-x:visible;gap:6px;
+                overflow-x:visible;gap:5px;
             }
             .gallery-thumb{flex-shrink:1}
         }
 
         .main-image-wrap{
-            border-radius:16px;overflow:hidden;position:relative;
+            border-radius:12px;overflow:hidden;position:relative;
             border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);
         }
         .main-image-wrap img{
-            width:100%;display:block;transition:opacity .4s ease, transform .6s cubic-bezier(.4,0,.2,1);
-            cursor:zoom-in;
+            width:100%;height:260px;object-fit:cover;display:block;
+            transition:opacity .3s ease;cursor:zoom-in;
         }
-        .main-image-wrap:hover img{transform:scale(1.015)}
+        @media(min-width:640px){.main-image-wrap img{height:340px}}
+        @media(min-width:1024px){.main-image-wrap img{height:380px}}
 
         .lightbox{
             position:fixed;inset:0;z-index:70;
@@ -184,17 +182,18 @@
         #stickyBar.show{bottom:0}
 
         .video-wrap{
-            border-radius:14px;overflow:hidden;position:relative;
+            border-radius:12px;overflow:hidden;position:relative;
             border:1px solid rgba(255,255,255,.1);background:#000;cursor:pointer;
+            width:160px;height:284px;
         }
-        .video-wrap video{width:100%;display:block;object-fit:cover}
+        .video-wrap video{width:100%;height:100%;display:block;object-fit:cover}
         .video-overlay{
             position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-            background:rgba(0,0,0,.35);transition:all .3s ease;
+            background:rgba(0,0,0,.35);transition:opacity .3s ease;
         }
         .video-wrap.playing .video-overlay{opacity:0;pointer-events:none}
         .video-play-btn{
-            width:48px;height:48px;border-radius:50%;
+            width:42px;height:42px;border-radius:50%;
             background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;
             transition:all .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);
         }
@@ -210,13 +209,9 @@
 
         .info-row{
             display:flex;align-items:center;justify-content:space-between;
-            padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06);
+            padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);
         }
         .info-row:last-child{border-bottom:none}
-
-        .scroll-y::-webkit-scrollbar{width:3px}
-        .scroll-y::-webkit-scrollbar-track{background:transparent}
-        .scroll-y::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
 
         .t-dim{color:#999}
         .t-label{color:#777}
@@ -226,16 +221,16 @@
         .t-warn-dim{color:rgba(251,191,36,.6)}
 
         .img-counter{
-            position:absolute;bottom:10px;right:10px;
-            background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
-            border-radius:8px;padding:3px 9px;
-            font-size:11px;font-weight:500;color:rgba(255,255,255,.8);
-            border:1px solid rgba(255,255,255,.1);
+            position:absolute;bottom:8px;right:8px;
+            background:rgba(0,0,0,.55);backdrop-filter:blur(8px);
+            border-radius:6px;padding:2px 8px;
+            font-size:10px;font-weight:500;color:rgba(255,255,255,.75);
+            border:1px solid rgba(255,255,255,.08);
         }
 
         .lb-nav{
             position:absolute;top:50%;transform:translateY(-50%);
-            width:44px;height:44px;border-radius:50%;
+            width:42px;height:42px;border-radius:50%;
             background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
             display:flex;align-items:center;justify-content:center;
             cursor:pointer;transition:all .25s ease;color:#fff;backdrop-filter:blur(8px);
@@ -243,7 +238,6 @@
         .lb-nav:hover{background:rgba(255,255,255,.2)}
         .lb-prev{left:12px}
         .lb-next{right:12px}
-        @media(min-width:640px){.lb-prev{left:20px}.lb-next{right:20px}}
 
         .flink{
             color:#888;text-decoration:none;font-size:11px;
@@ -252,30 +246,29 @@
         }
         .flink:hover{color:#ccc;text-decoration-color:rgba(255,255,255,.25)}
 
-        /* Full-bleed section helper */
         .full-bleed{margin-left:calc(-1 * var(--bleed, 16px));margin-right:calc(-1 * var(--bleed, 16px));border-radius:0}
         @media(min-width:640px){.full-bleed{--bleed:24px}}
         @media(min-width:1024px){.full-bleed{--bleed:0px}}
 
-        /* More photos full-bleed on mobile */
-        .photos-grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+        .photos-grid{display:grid;gap:6px;grid-template-columns:repeat(2,1fr)}
         .photos-grid .wide{grid-column:span 2}
-        @media(min-width:640px){.photos-grid{grid-template-columns:repeat(3,1fr);gap:10px}.photos-grid .wide{grid-column:span 3}}
-        @media(min-width:1024px){.photos-grid{grid-template-columns:repeat(4,1fr);gap:10px}.photos-grid .wide{grid-column:span 2}}
+        @media(min-width:640px){.photos-grid{grid-template-columns:repeat(3,1fr);gap:8px}.photos-grid .wide{grid-column:span 3}}
+        @media(min-width:1024px){.photos-grid{grid-template-columns:repeat(4,1fr);gap:8px}.photos-grid .wide{grid-column:span 2}}
+
+        .scroll-y::-webkit-scrollbar{width:3px}
+        .scroll-y::-webkit-scrollbar-track{background:transparent}
+        .scroll-y::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
     </style>
 </head>
 <body>
 
-<!-- Scroll Progress -->
 <div id="scrollProgress"></div>
 
-<!-- Toast -->
 <div id="toast" class="toast fixed bottom-20 left-1/2 -translate-x-1/2 z-[75] bg-white text-black px-5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 shadow-2xl whitespace-nowrap">
     <i data-lucide="check-circle" class="w-4 h-4"></i>
     <span id="toastMsg"></span>
 </div>
 
-<!-- Lightbox -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
     <button class="lb-nav lb-prev" onclick="lbNav(event,-1)"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
     <img id="lbImg" src="" alt="Enlarged view">
@@ -320,7 +313,7 @@
     </div>
 </nav>
 
-<!-- Hero — full width -->
+<!-- Hero -->
 <section class="pt-24 sm:pt-28 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8">
     <div class="flex items-center gap-2 mb-4 anim-1">
         <span class="shimmer-badge px-2.5 py-1 rounded-md text-[9px] font-bold tracking-[.15em] uppercase border border-white/10">For Sale</span>
@@ -335,7 +328,7 @@
     </p>
 </section>
 
-<!-- Price Banner — full bleed on mobile -->
+<!-- Price Banner -->
 <section class="px-4 sm:px-6 lg:px-8 pb-4 anim-3">
     <div class="glass-strong p-4 sm:p-5 full-bleed" style="animation:pulse-glow 4s ease-in-out infinite">
         <div class="flex items-center justify-between mb-1">
@@ -361,42 +354,40 @@
     </div>
 </section>
 
-<!-- Main Image — full bleed on mobile -->
+<!-- Gallery -->
 <section class="px-4 sm:px-6 lg:px-8 pb-3 anim-3">
     <div class="main-image-wrap full-bleed" id="mainImageWrap" onclick="openLightbox(currentImgIndex)">
         <img id="mainImage" src="led2.jpg" alt="PC Setup - Main" loading="eager">
         <div class="img-counter"><span id="imgCounterText">1 / 9</span></div>
-        <div class="absolute top-3 left-3 flex gap-1.5">
-            <button onclick="event.stopPropagation();prevImage()" class="w-8 h-8 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
-                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        <div class="absolute top-2.5 left-2.5 flex gap-1.5">
+            <button onclick="event.stopPropagation();prevImage()" class="w-7 h-7 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
+                <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="event.stopPropagation();nextImage()" class="w-8 h-8 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
-                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <button onclick="event.stopPropagation();nextImage()" class="w-7 h-7 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             </button>
         </div>
     </div>
 </section>
 
-<!-- Thumbnails — horizontal scroll on mobile, grid on desktop -->
+<!-- Thumbnails -->
 <section class="px-4 sm:px-6 lg:px-8 pb-5 anim-4">
     <div class="thumb-strip" id="thumbGrid">
-        <div class="gallery-thumb active aspect-square" style="width:64px;height:64px" onclick="setImage(0,'led2.jpg')"><img src="led2.jpg" alt="Monitor" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(1,'pcSet1.jpg')"><img src="pcSet1.jpg" alt="PC Set 1" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(2,'systemInfo.jpg')"><img src="systemInfo.jpg" alt="System Info" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(3,'fullSet.jpg')"><img src="fullSet.jpg" alt="Full Set" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(4,'processor.jpg')"><img src="processor.jpg" alt="Processor" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(5,'screenMirror.jpg')"><img src="screenMirror.jpg" alt="Screen Mirror" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(6,'pcSet2.jpg')"><img src="pcSet2.jpg" alt="PC Set 2" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(7,'led.jpg')"><img src="led.jpg" alt="Monitor 2" loading="lazy"></div>
-        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(8,'study.jpg')"><img src="study.jpg" alt="Study Setup" loading="lazy"></div>
+        <div class="gallery-thumb active" style="width:52px;height:52px" onclick="setImage(0,'led2.jpg')"><img src="led2.jpg" alt="Monitor" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(1,'pcSet1.jpg')"><img src="pcSet1.jpg" alt="PC Set 1" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(2,'systemInfo.jpg')"><img src="systemInfo.jpg" alt="System Info" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(3,'fullSet.jpg')"><img src="fullSet.jpg" alt="Full Set" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(4,'processor.jpg')"><img src="processor.jpg" alt="Processor" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(5,'screenMirror.jpg')"><img src="screenMirror.jpg" alt="Screen Mirror" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(6,'pcSet2.jpg')"><img src="pcSet2.jpg" alt="PC Set 2" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(7,'led.jpg')"><img src="led.jpg" alt="Monitor 2" loading="lazy"></div>
+        <div class="gallery-thumb" style="width:52px;height:52px" onclick="setImage(8,'study.jpg')"><img src="study.jpg" alt="Study Setup" loading="lazy"></div>
     </div>
 </section>
 
-<!-- Two column layout on desktop, stacked on mobile -->
+<!-- Two Column -->
 <section class="px-4 sm:px-6 lg:px-8 pb-6">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
-
-        <!-- Left Column (wider on desktop) -->
         <div class="lg:col-span-2 space-y-5">
 
             <!-- Video -->
@@ -404,47 +395,59 @@
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-2.5 flex items-center gap-2">
                     <i data-lucide="video" class="w-3 h-3"></i> Video Walkthrough
                 </p>
-                <div class="video-wrap" id="videoWrap" onclick="toggleVideo()" style="max-width:280px">
-                    <video id="videoPlayer" src="video.mp4" playsinline preload="metadata" loop></video>
-                    <div class="video-overlay" id="videoOverlay">
-                        <div class="video-play-btn">
-                            <i data-lucide="play" class="w-5 h-5 text-black ml-0.5" id="playIcon"></i>
+                <div class="flex items-start gap-3">
+                    <div class="video-wrap" id="videoWrap">
+                        <video id="videoPlayer" playsinline preload="metadata" loop muted>
+                            <source src="video.mp4" type="video/mp4">
+                            Your browser does not support video.
+                        </video>
+                        <div class="video-overlay" id="videoOverlay">
+                            <div class="video-play-btn" id="videoPlayBtn">
+                                <i data-lucide="play" class="w-5 h-5 text-black ml-0.5" id="playIcon"></i>
+                            </div>
                         </div>
                     </div>
+                    <div class="pt-1">
+                        <p class="text-xs font-medium mb-0.5">Portrait video</p>
+                        <p class="text-[11px] t-label leading-relaxed">Quick walkthrough of the setup. Tap to play.</p>
+                        <button id="muteBtn" onclick="event.stopPropagation();toggleMute()" class="ghost-btn !text-[10px] !py-1.5 !px-2 mt-2 border border-white/10">
+                            <i data-lucide="volume-x" class="w-3 h-3" id="muteIcon"></i>
+                            <span id="muteTxt">Unmute</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="t-label text-[10px] mt-2">Tap to play / pause</p>
             </div>
 
-            <!-- Specs Grid -->
+            <!-- Specs -->
             <div class="reveal">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
                     <i data-lucide="cpu" class="w-3 h-3"></i> Specifications
                 </p>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div class="spec-card">
-                        <i data-lucide="cpu" class="w-5 h-5 t-dim mb-2"></i>
-                        <p class="text-xl sm:text-2xl font-bold">i7</p>
+                        <i data-lucide="cpu" class="w-4 h-4 t-dim mb-1.5"></i>
+                        <p class="text-lg font-bold">i7</p>
                         <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">4th Gen</p>
                     </div>
                     <div class="spec-card">
-                        <i data-lucide="memory-stick" class="w-5 h-5 t-dim mb-2"></i>
-                        <p class="text-xl sm:text-2xl font-bold">16GB</p>
+                        <i data-lucide="memory-stick" class="w-4 h-4 t-dim mb-1.5"></i>
+                        <p class="text-lg font-bold">16GB</p>
                         <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">RAM</p>
                     </div>
                     <div class="spec-card">
-                        <i data-lucide="hard-drive" class="w-5 h-5 t-dim mb-2"></i>
-                        <p class="text-xl sm:text-2xl font-bold">1TB</p>
+                        <i data-lucide="hard-drive" class="w-4 h-4 t-dim mb-1.5"></i>
+                        <p class="text-lg font-bold">1TB</p>
                         <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">HDD</p>
                     </div>
                     <div class="spec-card">
-                        <i data-lucide="monitor" class="w-5 h-5 t-dim mb-2"></i>
-                        <p class="text-xl sm:text-2xl font-bold">Yes</p>
+                        <i data-lucide="monitor" class="w-4 h-4 t-dim mb-1.5"></i>
+                        <p class="text-lg font-bold">Yes</p>
                         <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">Monitor</p>
                     </div>
                 </div>
             </div>
 
-            <!-- What's Included — full bleed on mobile -->
+            <!-- What's Included -->
             <div class="reveal">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
                     <i data-lucide="package" class="w-3 h-3"></i> What's Included
@@ -452,8 +455,8 @@
                 <div class="glass p-4 sm:p-5 full-bleed space-y-0">
                     <div class="info-row">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                <i data-lucide="monitor" class="w-4 h-4 t-dim"></i>
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="monitor" class="w-3.5 h-3.5 t-dim"></i>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-sm font-medium">Desktop PC Tower</p>
@@ -464,8 +467,8 @@
                     </div>
                     <div class="info-row">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                <i data-lucide="tv" class="w-4 h-4 t-dim"></i>
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="tv" class="w-3.5 h-3.5 t-dim"></i>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-sm font-medium">Monitor</p>
@@ -476,8 +479,8 @@
                     </div>
                     <div class="info-row">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                <i data-lucide="tablet" class="w-4 h-4 t-dim"></i>
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="tablet" class="w-3.5 h-3.5 t-dim"></i>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-sm font-medium">DIXON Tablet</p>
@@ -488,8 +491,8 @@
                     </div>
                     <div class="info-row">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                <i data-lucide="keyboard" class="w-4 h-4 t-dim"></i>
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="keyboard" class="w-3.5 h-3.5 t-dim"></i>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-sm font-medium">Wireless Keyboard & Mouse</p>
@@ -500,8 +503,8 @@
                     </div>
                     <div class="info-row">
                         <div class="flex items-center gap-3 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                                <i data-lucide="cable" class="w-4 h-4 t-dim"></i>
+                            <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="cable" class="w-3.5 h-3.5 t-dim"></i>
                             </div>
                             <div class="min-w-0">
                                 <p class="text-sm font-medium">All Cables & Power Supplies</p>
@@ -513,15 +516,15 @@
                 </div>
             </div>
 
-            <!-- Problems Section — full bleed on mobile -->
+            <!-- Problems -->
             <div class="reveal">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-warn-dim mb-3 flex items-center gap-2">
                     <i data-lucide="alert-triangle" class="w-3 h-3"></i> Problems
                 </p>
                 <div class="glass-warn p-4 sm:p-5 full-bleed">
                     <div class="flex items-start gap-3 mb-4">
-                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.15)">
-                            <i data-lucide="fan" class="w-[18px] h-[18px] t-warn"></i>
+                        <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.15)">
+                            <i data-lucide="fan" class="w-4 h-4 t-warn"></i>
                         </div>
                         <div class="min-w-0">
                             <p class="text-sm font-semibold mb-1">CPU fan not working</p>
@@ -543,23 +546,21 @@
                 </div>
             </div>
 
-            <!-- System Info Screenshot — full bleed on mobile -->
+            <!-- System Info -->
             <div class="reveal">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
                     <i data-lucide="info" class="w-3 h-3"></i> System Info (Verified)
                 </p>
                 <div class="main-image-wrap full-bleed" onclick="openLightbox(2)" style="cursor:zoom-in">
-                    <img src="systemInfo.jpg" alt="System Information Screenshot" loading="lazy">
+                    <img src="systemInfo.jpg" alt="System Information Screenshot" loading="lazy" style="height:200px">
                 </div>
                 <p class="t-label text-[10px] mt-2">Actual system info screenshot — what you see is what you get.</p>
             </div>
 
         </div>
 
-        <!-- Right Column (sidebar on desktop) -->
+        <!-- Right Sidebar -->
         <div class="space-y-5">
-
-            <!-- Quick Info -->
             <div class="glass p-4 sm:p-5 anim-4">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3">At a Glance</p>
                 <div class="space-y-0">
@@ -590,7 +591,6 @@
                 </div>
             </div>
 
-            <!-- How It Works -->
             <div class="glass p-4 sm:p-5 reveal">
                 <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
                     <i data-lucide="shield-check" class="w-3 h-3"></i> How It Works
@@ -627,20 +627,18 @@
                 </div>
             </div>
 
-            <!-- Why Selling -->
             <div class="glass-light p-4 reveal">
                 <div class="flex items-start gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
-                        <i data-lucide="arrow-up-circle" class="w-4 h-4 t-dim"></i>
+                    <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                        <i data-lucide="arrow-up-circle" class="w-3.5 h-3.5 t-dim"></i>
                     </div>
                     <div>
                         <p class="text-xs font-semibold mb-0.5">Reason for selling</p>
-                        <p class="text-[11px] t-dim font-light leading-relaxed">Upscaling to a higher-spec build. This set served me well — fully functional and ready for someone who needs a solid workstation.</p>
+                        <p class="text-[11px] t-dim font-light leading-relaxed">Upscaling to a higher-spec build. Fully functional and ready for someone who needs a solid workstation.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Save / Share -->
             <div class="flex gap-2 reveal">
                 <button onclick="copyLink()" class="ghost-btn flex-1 !justify-center border border-white/10">
                     <i data-lucide="link" class="w-3.5 h-3.5"></i>
@@ -651,12 +649,11 @@
                     Share
                 </button>
             </div>
-
         </div>
     </div>
 </section>
 
-<!-- More Photos — full bleed on mobile -->
+<!-- More Photos -->
 <section class="px-4 sm:px-6 lg:px-8 pb-6">
     <div class="divider mb-6"></div>
     <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2 reveal">
@@ -687,7 +684,7 @@
     </div>
 </section>
 
-<!-- Contact CTA — full bleed on mobile -->
+<!-- CTA -->
 <section class="px-4 sm:px-6 lg:px-8 pb-10 sm:pb-14">
     <div class="divider mb-6"></div>
     <div class="glass-strong p-5 sm:p-8 text-center full-bleed reveal">
@@ -707,14 +704,12 @@
     </div>
 </section>
 
-<!-- Footer — full bleed -->
+<!-- Footer -->
 <footer class="px-4 sm:px-6 lg:px-8 py-5 border-t border-white/[.08]">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3 flex-wrap t-label text-[10px]">
-            <span>© 2026</span>
-            <span>·</span>
-            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a>
-            <span>·</span>
+            <span>© 2026</span><span>·</span>
+            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a><span>·</span>
             <span>Pretoria, Gauteng</span>
         </div>
         <div class="flex items-center gap-3">
@@ -725,7 +720,7 @@
     </div>
 </footer>
 
-<!-- Sticky Price Bar -->
+<!-- Sticky Bar -->
 <div id="stickyBar">
     <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0">
@@ -748,7 +743,6 @@
 <script>
 lucide.createIcons();
 
-// === IMAGE GALLERY ===
 const images = [
     {src:'led2.jpg',alt:'Monitor - Main'},
     {src:'pcSet1.jpg',alt:'PC Set Angle 1'},
@@ -775,12 +769,10 @@ function setImage(idx, src) {
     }, 200);
     counterText.textContent = (idx + 1) + ' / ' + images.length;
     thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
-    // Scroll thumb into view on mobile
     if (window.innerWidth < 640) {
         thumbs[idx]?.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
     }
 }
-
 function nextImage() { setImage((currentImgIndex + 1) % images.length, images[(currentImgIndex + 1) % images.length].src); }
 function prevImage() { setImage((currentImgIndex - 1 + images.length) % images.length, images[(currentImgIndex - 1 + images.length) % images.length].src); }
 
@@ -795,7 +787,6 @@ document.addEventListener('keydown', e => {
     }
 });
 
-// === LIGHTBOX ===
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lbImg');
 const lbCounter = document.getElementById('lbCounter');
@@ -816,18 +807,26 @@ function lbNav(e, dir) {
     e.stopPropagation();
     currentImgIndex = (currentImgIndex + dir + images.length) % images.length;
     lbImg.style.opacity = '0';
-    setTimeout(() => {
-        lbImg.src = images[currentImgIndex].src;
-        lbImg.style.opacity = '1';
-    }, 150);
+    setTimeout(() => { lbImg.src = images[currentImgIndex].src; lbImg.style.opacity = '1'; }, 150);
     lbCounter.textContent = (currentImgIndex + 1) + ' / ' + images.length;
     setImage(currentImgIndex, images[currentImgIndex].src);
 }
 
-// === VIDEO ===
+// === VIDEO — fixed ===
 const videoWrap = document.getElementById('videoWrap');
 const videoPlayer = document.getElementById('videoPlayer');
+const videoPlayBtn = document.getElementById('videoPlayBtn');
+const videoOverlay = document.getElementById('videoOverlay');
 let isPlaying = false;
+
+videoPlayBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleVideo();
+});
+videoWrap.addEventListener('click', function(e) {
+    if (e.target.closest('#videoPlayBtn') || e.target.closest('#muteBtn')) return;
+    toggleVideo();
+});
 
 function toggleVideo() {
     if (isPlaying) {
@@ -835,39 +834,63 @@ function toggleVideo() {
         videoWrap.classList.remove('playing');
         isPlaying = false;
     } else {
-        videoPlayer.play();
+        var p = videoPlayer.play();
+        if (p && typeof p.catch === 'function') {
+            p.catch(function(err) {
+                console.log('Play failed:', err);
+                // Try unmuted play as fallback
+                videoPlayer.muted = true;
+                videoPlayer.play().then(function() {
+                    videoWrap.classList.add('playing');
+                    isPlaying = true;
+                    updateMuteUI();
+                }).catch(function(e2) {
+                    console.log('Muted play also failed:', e2);
+                });
+            });
+        }
         videoWrap.classList.add('playing');
         isPlaying = true;
     }
 }
+
+function toggleMute() {
+    videoPlayer.muted = !videoPlayer.muted;
+    updateMuteUI();
+}
+function updateMuteUI() {
+    var icon = document.getElementById('muteIcon');
+    var txt = document.getElementById('muteTxt');
+    if (videoPlayer.muted) {
+        icon.setAttribute('data-lucide', 'volume-x');
+        txt.textContent = 'Unmute';
+    } else {
+        icon.setAttribute('data-lucide', 'volume-2');
+        txt.textContent = 'Mute';
+    }
+    lucide.createIcons();
+}
+
 videoPlayer.addEventListener('ended', () => {
     videoWrap.classList.remove('playing');
     isPlaying = false;
 });
 
-// === SCROLL PROGRESS ===
+// === SCROLL ===
 window.addEventListener('scroll', () => {
     const h = document.documentElement;
-    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    document.getElementById('scrollProgress').style.width = pct + '%';
-    const bar = document.getElementById('stickyBar');
-    if (h.scrollTop > 500) bar.classList.add('show');
-    else bar.classList.remove('show');
+    document.getElementById('scrollProgress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+    document.getElementById('stickyBar').classList.toggle('show', h.scrollTop > 500);
 }, {passive: true});
 
-// === SCROLL REVEAL ===
+// === REVEAL ===
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            revealObserver.unobserve(entry.target);
-        }
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
     });
 }, {threshold: 0.08, rootMargin: '0px 0px -30px 0px'});
-
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// === TOAST ===
 function toast(m) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = m;
@@ -875,7 +898,6 @@ function toast(m) {
     setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// === COPY LINK ===
 function copyLink() {
     navigator.clipboard.writeText(window.location.href).then(() => {
         document.getElementById('copyLinkTxt').textContent = 'Copied!';
@@ -884,33 +906,28 @@ function copyLink() {
     }).catch(() => toast('Could not copy'));
 }
 
-// === NATIVE SHARE ===
 function shareNative() {
     if (navigator.share) {
         navigator.share({
             title: 'PC Full Set for Sale — R5,500',
-            text: 'PC Full Set + DIXON Tablet + Wireless KB & Mouse. i7 4th Gen, 16GB RAM, 1TB HDD. Pretoria, Gauteng.',
+            text: 'PC Full Set + DIXON Tablet + Wireless KB & Mouse. i7 4th Gen, 16GB RAM, 1TB HDD. Pretoria.',
             url: window.location.href
         }).catch(() => {});
-    } else {
-        copyLink();
-    }
+    } else { copyLink(); }
 }
 
-// === TOUCH SWIPE ===
+// Touch swipe
 let touchStartX = 0;
-const mainWrap = document.getElementById('mainImageWrap');
-mainWrap.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-mainWrap.addEventListener('touchend', e => {
-    const diff = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(diff) > 50) { if (diff < 0) nextImage(); else prevImage(); }
+document.getElementById('mainImageWrap').addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+document.getElementById('mainImageWrap').addEventListener('touchend', e => {
+    const d = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(d) > 50) { if (d < 0) nextImage(); else prevImage(); }
 }, {passive: true});
-
 let lbTouchX = 0;
 lightbox.addEventListener('touchstart', e => { lbTouchX = e.changedTouches[0].screenX; }, {passive: true});
 lightbox.addEventListener('touchend', e => {
-    const diff = e.changedTouches[0].screenX - lbTouchX;
-    if (Math.abs(diff) > 50) { if (diff < 0) lbNav(e, 1); else lbNav(e, -1); }
+    const d = e.changedTouches[0].screenX - lbTouchX;
+    if (Math.abs(d) > 50) { if (d < 0) lbNav(e, 1); else lbNav(e, -1); }
 }, {passive: true});
 </script>
 </body>
