@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Full Set — For Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Inter',sans-serif;color:#fff;overflow-x:hidden;
+            background:#09090b;
+            background-image:url('greens.jpg');
+            background-size:cover;background-position:center;
+            background-attachment:fixed;background-repeat:no-repeat;
+        }
+        body::before{
+            content:'';position:fixed;inset:0;z-index:0;
+            background:rgba(0,0,0,.78);pointer-events:none;
+        }
+        body>*{position:relative;z-index:1}
+        ::selection{background:#fff;color:#000}
+
+        #scrollProgress{
+            position:fixed;top:0;left:0;height:2px;z-index:60;
+            background:#fff;width:0%;transition:width .1s linear;
+        }
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pulse-glow{0%,100%{box-shadow:0 0 8px rgba(255,255,255,.06)}50%{box-shadow:0 0 20px rgba(255,255,255,.12)}}
+        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+        .anim-1{animation:fadeUp .7s ease-out forwards}
+        .anim-2{animation:fadeUp .7s ease-out .12s forwards;opacity:0}
+        .anim-3{animation:fadeUp .7s ease-out .24s forwards;opacity:0}
+        .anim-4{animation:fadeUp .7s ease-out .36s forwards;opacity:0}
+        .anim-5{animation:fadeUp .7s ease-out .48s forwards;opacity:0}
+
+        .reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.4,0,.2,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-delay-1{transition-delay:.1s}
+        .reveal-delay-2{transition-delay:.2s}
+        .reveal-delay-3{transition-delay:.3s}
+        .reveal-delay-4{transition-delay:.4s}
+
+        .glass{
+            background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;
+        }
+        .glass-strong{
+            background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+            backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:16px;
+        }
+        .glass-light{
+            background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+            backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:12px;
+        }
+        .glass-warn{
+            background:rgba(251,191,36,.04);border:1px solid rgba(251,191,36,.18);
+            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;
+        }
+
+        .spec-card{
+            background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+            backdrop-filter:blur(16px);border-radius:14px;padding:16px;
+            transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+        }
+        .spec-card::before{
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(135deg,rgba(255,255,255,.06),transparent 60%);
+            opacity:0;transition:opacity .35s ease;
+        }
+        .spec-card:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+        .spec-card:hover::before{opacity:1}
+
+        /* Thumbnail scroll strip */
+        .thumb-strip{
+            display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;
+            -webkit-overflow-scrolling:touch;scrollbar-width:none;
+            padding-bottom:4px;
+        }
+        .thumb-strip::-webkit-scrollbar{display:none}
+
+        .gallery-thumb{
+            border-radius:10px;overflow:hidden;cursor:pointer;
+            border:2px solid transparent;transition:all .3s ease;position:relative;
+            flex-shrink:0;
+        }
+        .gallery-thumb::after{
+            content:'';position:absolute;inset:0;
+            background:rgba(0,0,0,.3);transition:all .3s ease;
+        }
+        .gallery-thumb:hover::after{background:rgba(0,0,0,.1)}
+        .gallery-thumb.active{border-color:rgba(255,255,255,.5)}
+        .gallery-thumb.active::after{background:transparent}
+        .gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+        .gallery-thumb:hover img{transform:scale(1.05)}
+
+        /* Desktop: grid thumbs */
+        @media(min-width:640px){
+            .thumb-strip{
+                display:grid;grid-template-columns:repeat(9,1fr);
+                overflow-x:visible;gap:6px;
+            }
+            .gallery-thumb{flex-shrink:1}
+        }
+
+        .main-image-wrap{
+            border-radius:16px;overflow:hidden;position:relative;
+            border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);
+        }
+        .main-image-wrap img{
+            width:100%;display:block;transition:opacity .4s ease, transform .6s cubic-bezier(.4,0,.2,1);
+            cursor:zoom-in;
+        }
+        .main-image-wrap:hover img{transform:scale(1.015)}
+
+        .lightbox{
+            position:fixed;inset:0;z-index:70;
+            background:rgba(0,0,0,.92);backdrop-filter:blur(30px);
+            display:flex;align-items:center;justify-content:center;
+            opacity:0;pointer-events:none;transition:opacity .3s ease;
+        }
+        .lightbox.open{opacity:1;pointer-events:auto}
+        .lightbox img{
+            max-width:92vw;max-height:85vh;object-fit:contain;border-radius:12px;
+            transform:scale(.92);transition:transform .35s cubic-bezier(.4,0,.2,1);
+        }
+        .lightbox.open img{transform:scale(1)}
+
+        .card-btn{
+            background:#fff;color:#000;border:none;border-radius:10px;
+            padding:12px 24px;font-size:13px;font-weight:700;cursor:pointer;
+            transition:all .3s ease;display:inline-flex;align-items:center;gap:8px;
+            font-family:inherit;letter-spacing:.01em;
+        }
+        .card-btn:hover{background:#e5e5e5;transform:translateY(-1px);box-shadow:0 8px 30px rgba(255,255,255,.15)}
+        .card-btn:active{transform:translateY(0)}
+
+        .outline-btn{
+            background:transparent;color:#ccc;border:1px solid rgba(255,255,255,.15);
+            border-radius:10px;padding:12px 24px;font-size:13px;font-weight:500;
+            cursor:pointer;transition:all .3s ease;font-family:inherit;
+            display:inline-flex;align-items:center;gap:8px;
+        }
+        .outline-btn:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:#fff}
+
+        .ghost-btn{
+            background:transparent;color:#999;border:none;
+            padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;
+            transition:all .3s ease;font-family:inherit;border-radius:8px;
+            display:inline-flex;align-items:center;gap:6px;
+        }
+        .ghost-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+
+        .nav-link{
+            color:#999;text-decoration:none;font-size:12px;
+            font-weight:500;letter-spacing:.04em;transition:color .25s;
+            display:inline-flex;align-items:center;gap:5px;
+        }
+        .nav-link:hover,.nav-link.active{color:#fff}
+
+        .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent)}
+
+        #stickyBar{
+            position:fixed;bottom:-80px;left:0;right:0;z-index:50;
+            transition:bottom .4s cubic-bezier(.4,0,.2,1);padding:10px 16px;
+            background:rgba(9,9,11,.88);border-top:1px solid rgba(255,255,255,.1);
+            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+        }
+        #stickyBar.show{bottom:0}
+
+        .video-wrap{
+            border-radius:14px;overflow:hidden;position:relative;
+            border:1px solid rgba(255,255,255,.1);background:#000;cursor:pointer;
+        }
+        .video-wrap video{width:100%;display:block;object-fit:cover}
+        .video-overlay{
+            position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+            background:rgba(0,0,0,.35);transition:all .3s ease;
+        }
+        .video-wrap.playing .video-overlay{opacity:0;pointer-events:none}
+        .video-play-btn{
+            width:48px;height:48px;border-radius:50%;
+            background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;
+            transition:all .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);
+        }
+        .video-wrap:hover .video-play-btn{transform:scale(1.08);background:#fff}
+
+        .toast{transform:translateY(16px);opacity:0;transition:all .35s ease}
+        .toast.show{transform:translateY(0);opacity:1}
+
+        .shimmer-badge{
+            background:linear-gradient(90deg,rgba(255,255,255,.08) 25%,rgba(255,255,255,.16) 50%,rgba(255,255,255,.08) 75%);
+            background-size:200% 100%;animation:shimmer 3s ease-in-out infinite;
+        }
+
+        .info-row{
+            display:flex;align-items:center;justify-content:space-between;
+            padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06);
+        }
+        .info-row:last-child{border-bottom:none}
+
+        .scroll-y::-webkit-scrollbar{width:3px}
+        .scroll-y::-webkit-scrollbar-track{background:transparent}
+        .scroll-y::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+
+        .t-dim{color:#999}
+        .t-label{color:#777}
+        .t-muted{color:#aaa}
+        .t-sub{color:#bbb}
+        .t-warn{color:#fbbf24}
+        .t-warn-dim{color:rgba(251,191,36,.6)}
+
+        .img-counter{
+            position:absolute;bottom:10px;right:10px;
+            background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+            border-radius:8px;padding:3px 9px;
+            font-size:11px;font-weight:500;color:rgba(255,255,255,.8);
+            border:1px solid rgba(255,255,255,.1);
+        }
+
+        .lb-nav{
+            position:absolute;top:50%;transform:translateY(-50%);
+            width:44px;height:44px;border-radius:50%;
+            background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+            display:flex;align-items:center;justify-content:center;
+            cursor:pointer;transition:all .25s ease;color:#fff;backdrop-filter:blur(8px);
+        }
+        .lb-nav:hover{background:rgba(255,255,255,.2)}
+        .lb-prev{left:12px}
+        .lb-next{right:12px}
+        @media(min-width:640px){.lb-prev{left:20px}.lb-next{right:20px}}
+
+        .flink{
+            color:#888;text-decoration:none;font-size:11px;
+            transition:color .25s;text-underline-offset:2px;
+            text-decoration:underline;text-decoration-color:rgba(255,255,255,.1);
+        }
+        .flink:hover{color:#ccc;text-decoration-color:rgba(255,255,255,.25)}
+
+        /* Full-bleed section helper */
+        .full-bleed{margin-left:calc(-1 * var(--bleed, 16px));margin-right:calc(-1 * var(--bleed, 16px));border-radius:0}
+        @media(min-width:640px){.full-bleed{--bleed:24px}}
+        @media(min-width:1024px){.full-bleed{--bleed:0px}}
+
+        /* More photos full-bleed on mobile */
+        .photos-grid{display:grid;gap:8px;grid-template-columns:repeat(2,1fr)}
+        .photos-grid .wide{grid-column:span 2}
+        @media(min-width:640px){.photos-grid{grid-template-columns:repeat(3,1fr);gap:10px}.photos-grid .wide{grid-column:span 3}}
+        @media(min-width:1024px){.photos-grid{grid-template-columns:repeat(4,1fr);gap:10px}.photos-grid .wide{grid-column:span 2}}
+    </style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div id="scrollProgress"></div>
+
+<!-- Toast -->
+<div id="toast" class="toast fixed bottom-20 left-1/2 -translate-x-1/2 z-[75] bg-white text-black px-5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 shadow-2xl whitespace-nowrap">
+    <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <span id="toastMsg"></span>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <button class="lb-nav lb-prev" onclick="lbNav(event,-1)"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+    <img id="lbImg" src="" alt="Enlarged view">
+    <button class="lb-nav lb-next" onclick="lbNav(event,1)"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center hover:bg-white/20 transition-colors" style="backdrop-filter:blur(8px)">
+        <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 text-xs font-medium" style="color:rgba(255,255,255,.6)">
+        <span id="lbCounter"></span> · Swipe or press Esc
+    </div>
+</div>
+
+<!-- Nav -->
+<nav class="fixed top-0 left-0 right-0 z-40 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between" style="backdrop-filter:blur(16px);background:rgba(9,9,11,.55)">
+    <div class="flex items-center gap-4 sm:gap-6">
+        <a href="index.html" class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-black"></div>
+            </div>
+        </a>
+        <div class="flex items-center gap-3 sm:gap-5">
+            <a href="index.html" class="nav-link">Services</a>
+            <a href="sellMyStuff.html" class="nav-link active">
+                <i data-lucide="tag" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">For Sale</span>
+            </a>
+            <a href="software.html" class="nav-link">
+                <i data-lucide="code" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Software</span>
+            </a>
+            <a href="beats.html" class="nav-link">
+                <i data-lucide="music" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Beats</span>
+            </a>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="tel:0705583893" class="nav-link">
+            <i data-lucide="phone" class="w-3 h-3"></i>
+            <span class="hidden md:inline">070 558 3893</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Hero — full width -->
+<section class="pt-24 sm:pt-28 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-2 mb-4 anim-1">
+        <span class="shimmer-badge px-2.5 py-1 rounded-md text-[9px] font-bold tracking-[.15em] uppercase border border-white/10">For Sale</span>
+        <span class="px-2.5 py-1 rounded-md bg-white/5 border border-white/8 text-[9px] font-semibold tracking-wider uppercase t-label">Pretoria, Gauteng</span>
+    </div>
+    <h1 class="text-[clamp(1.8rem,8vw,3.8rem)] font-extrabold leading-[.93] tracking-tight anim-2">
+        PC Full Set<br>
+        <span class="t-dim">+ Extras</span>
+    </h1>
+    <p class="mt-3 t-muted text-sm font-light max-w-xl anim-3 leading-relaxed">
+        Complete desktop setup with DIXON tablet and wireless rechargeable keyboard & mouse. Ready to use, come collect.
+    </p>
+</section>
+
+<!-- Price Banner — full bleed on mobile -->
+<section class="px-4 sm:px-6 lg:px-8 pb-4 anim-3">
+    <div class="glass-strong p-4 sm:p-5 full-bleed" style="animation:pulse-glow 4s ease-in-out infinite">
+        <div class="flex items-center justify-between mb-1">
+            <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label">Asking Price</p>
+            <span class="shimmer-badge px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase border border-white/10">Firm</span>
+        </div>
+        <div class="flex items-end justify-between gap-4">
+            <div>
+                <p class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">R5,500</p>
+                <p class="t-label text-[11px] mt-0.5">Instant EFT only · No cash</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <a href="https://wa.me/27705583893?text=Hi%2C%20I'm%20interested%20in%20the%20PC%20Full%20Set%20(R5%2C500)%20listed%20on%20your%20site." class="card-btn !py-2.5 !px-4 !text-xs" target="_blank">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    WhatsApp
+                </a>
+                <a href="tel:0705583893" class="outline-btn !py-2.5 !px-4 !text-xs !border-white/15">
+                    <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                    Call
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Image — full bleed on mobile -->
+<section class="px-4 sm:px-6 lg:px-8 pb-3 anim-3">
+    <div class="main-image-wrap full-bleed" id="mainImageWrap" onclick="openLightbox(currentImgIndex)">
+        <img id="mainImage" src="led2.jpg" alt="PC Setup - Main" loading="eager">
+        <div class="img-counter"><span id="imgCounterText">1 / 9</span></div>
+        <div class="absolute top-3 left-3 flex gap-1.5">
+            <button onclick="event.stopPropagation();prevImage()" class="w-8 h-8 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <button onclick="event.stopPropagation();nextImage()" class="w-8 h-8 rounded-lg bg-black/50 border border-white/15 flex items-center justify-center hover:bg-black/70 transition-colors" style="backdrop-filter:blur(8px)">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Thumbnails — horizontal scroll on mobile, grid on desktop -->
+<section class="px-4 sm:px-6 lg:px-8 pb-5 anim-4">
+    <div class="thumb-strip" id="thumbGrid">
+        <div class="gallery-thumb active aspect-square" style="width:64px;height:64px" onclick="setImage(0,'led2.jpg')"><img src="led2.jpg" alt="Monitor" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(1,'pcSet1.jpg')"><img src="pcSet1.jpg" alt="PC Set 1" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(2,'systemInfo.jpg')"><img src="systemInfo.jpg" alt="System Info" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(3,'fullSet.jpg')"><img src="fullSet.jpg" alt="Full Set" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(4,'processor.jpg')"><img src="processor.jpg" alt="Processor" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(5,'screenMirror.jpg')"><img src="screenMirror.jpg" alt="Screen Mirror" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(6,'pcSet2.jpg')"><img src="pcSet2.jpg" alt="PC Set 2" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(7,'led.jpg')"><img src="led.jpg" alt="Monitor 2" loading="lazy"></div>
+        <div class="gallery-thumb aspect-square" style="width:64px;height:64px" onclick="setImage(8,'study.jpg')"><img src="study.jpg" alt="Study Setup" loading="lazy"></div>
+    </div>
+</section>
+
+<!-- Two column layout on desktop, stacked on mobile -->
+<section class="px-4 sm:px-6 lg:px-8 pb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
+
+        <!-- Left Column (wider on desktop) -->
+        <div class="lg:col-span-2 space-y-5">
+
+            <!-- Video -->
+            <div class="reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-2.5 flex items-center gap-2">
+                    <i data-lucide="video" class="w-3 h-3"></i> Video Walkthrough
+                </p>
+                <div class="video-wrap" id="videoWrap" onclick="toggleVideo()" style="max-width:280px">
+                    <video id="videoPlayer" src="video.mp4" playsinline preload="metadata" loop></video>
+                    <div class="video-overlay" id="videoOverlay">
+                        <div class="video-play-btn">
+                            <i data-lucide="play" class="w-5 h-5 text-black ml-0.5" id="playIcon"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="t-label text-[10px] mt-2">Tap to play / pause</p>
+            </div>
+
+            <!-- Specs Grid -->
+            <div class="reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
+                    <i data-lucide="cpu" class="w-3 h-3"></i> Specifications
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="spec-card">
+                        <i data-lucide="cpu" class="w-5 h-5 t-dim mb-2"></i>
+                        <p class="text-xl sm:text-2xl font-bold">i7</p>
+                        <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">4th Gen</p>
+                    </div>
+                    <div class="spec-card">
+                        <i data-lucide="memory-stick" class="w-5 h-5 t-dim mb-2"></i>
+                        <p class="text-xl sm:text-2xl font-bold">16GB</p>
+                        <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">RAM</p>
+                    </div>
+                    <div class="spec-card">
+                        <i data-lucide="hard-drive" class="w-5 h-5 t-dim mb-2"></i>
+                        <p class="text-xl sm:text-2xl font-bold">1TB</p>
+                        <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">HDD</p>
+                    </div>
+                    <div class="spec-card">
+                        <i data-lucide="monitor" class="w-5 h-5 t-dim mb-2"></i>
+                        <p class="text-xl sm:text-2xl font-bold">Yes</p>
+                        <p class="text-[10px] t-label font-medium tracking-wider uppercase mt-0.5">Monitor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What's Included — full bleed on mobile -->
+            <div class="reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
+                    <i data-lucide="package" class="w-3 h-3"></i> What's Included
+                </p>
+                <div class="glass p-4 sm:p-5 full-bleed space-y-0">
+                    <div class="info-row">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="monitor" class="w-4 h-4 t-dim"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium">Desktop PC Tower</p>
+                                <p class="text-[11px] t-label">i7 4th Gen · 16GB RAM · 1TB HDD</p>
+                            </div>
+                        </div>
+                        <i data-lucide="check" class="w-4 h-4 text-green-400 shrink-0 ml-3"></i>
+                    </div>
+                    <div class="info-row">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="tv" class="w-4 h-4 t-dim"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium">Monitor</p>
+                                <p class="text-[11px] t-label">Screen included</p>
+                            </div>
+                        </div>
+                        <i data-lucide="check" class="w-4 h-4 text-green-400 shrink-0 ml-3"></i>
+                    </div>
+                    <div class="info-row">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="tablet" class="w-4 h-4 t-dim"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium">DIXON Tablet</p>
+                                <p class="text-[11px] t-label">Bonus item</p>
+                            </div>
+                        </div>
+                        <i data-lucide="check" class="w-4 h-4 text-green-400 shrink-0 ml-3"></i>
+                    </div>
+                    <div class="info-row">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="keyboard" class="w-4 h-4 t-dim"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium">Wireless Keyboard & Mouse</p>
+                                <p class="text-[11px] t-label">Rechargeable</p>
+                            </div>
+                        </div>
+                        <i data-lucide="check" class="w-4 h-4 text-green-400 shrink-0 ml-3"></i>
+                    </div>
+                    <div class="info-row">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="cable" class="w-4 h-4 t-dim"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium">All Cables & Power Supplies</p>
+                                <p class="text-[11px] t-label">Everything needed to run</p>
+                            </div>
+                        </div>
+                        <i data-lucide="check" class="w-4 h-4 text-green-400 shrink-0 ml-3"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problems Section — full bleed on mobile -->
+            <div class="reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-warn-dim mb-3 flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-3 h-3"></i> Problems
+                </p>
+                <div class="glass-warn p-4 sm:p-5 full-bleed">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.15)">
+                            <i data-lucide="fan" class="w-[18px] h-[18px] t-warn"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold mb-1">CPU fan not working</p>
+                            <p class="text-[12px] t-dim font-light leading-relaxed">The CPU cooling fan has stopped spinning. This does <span class="text-white font-medium">not affect daily tasks</span> — browsing, documents, media, and normal use all run fine. The system stays stable for typical workloads.</p>
+                        </div>
+                    </div>
+                    <div class="rounded-lg p-3" style="background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.1)">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="info" class="w-3.5 h-3.5 t-warn-dim shrink-0 mt-0.5"></i>
+                            <p class="text-[11px] t-warn-dim font-light leading-relaxed">If you plan heavy tasks (gaming, video editing, rendering), replace the fan. Cheap & easy fix — around R80–R200.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t" style="border-color:rgba(251,191,36,.1)">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-green-400"></i>
+                            <p class="text-[11px] font-medium" style="color:rgba(74,222,128,.8)">Everything else works perfectly. Test it yourself when you collect.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info Screenshot — full bleed on mobile -->
+            <div class="reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
+                    <i data-lucide="info" class="w-3 h-3"></i> System Info (Verified)
+                </p>
+                <div class="main-image-wrap full-bleed" onclick="openLightbox(2)" style="cursor:zoom-in">
+                    <img src="systemInfo.jpg" alt="System Information Screenshot" loading="lazy">
+                </div>
+                <p class="t-label text-[10px] mt-2">Actual system info screenshot — what you see is what you get.</p>
+            </div>
+
+        </div>
+
+        <!-- Right Column (sidebar on desktop) -->
+        <div class="space-y-5">
+
+            <!-- Quick Info -->
+            <div class="glass p-4 sm:p-5 anim-4">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3">At a Glance</p>
+                <div class="space-y-0">
+                    <div class="info-row">
+                        <span class="text-xs t-dim">Condition</span>
+                        <span class="text-xs font-medium">Used · Working</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="text-xs t-dim">Location</span>
+                        <span class="text-xs font-medium">Pretoria, Gauteng</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="text-xs t-dim">Payment</span>
+                        <span class="text-xs font-medium">Instant EFT</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="text-xs t-dim">Delivery</span>
+                        <span class="text-xs font-medium">Collect only</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="text-xs t-dim">Reason</span>
+                        <span class="text-xs font-medium">Upscaling</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="text-xs t-warn-dim">Issue</span>
+                        <span class="text-xs font-medium t-warn">CPU fan not working</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="glass p-4 sm:p-5 reveal">
+                <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-3 h-3"></i> How It Works
+                </p>
+                <div class="space-y-3">
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5">1</div>
+                        <div>
+                            <p class="text-xs font-medium">Message me</p>
+                            <p class="text-[11px] t-label mt-0.5">WhatsApp or call to confirm availability.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5">2</div>
+                        <div>
+                            <p class="text-xs font-medium">Instant EFT</p>
+                            <p class="text-[11px] t-label mt-0.5">Payment clears instantly — no waiting.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5">3</div>
+                        <div>
+                            <p class="text-xs font-medium">Come collect</p>
+                            <p class="text-[11px] t-label mt-0.5">Pick up in Pretoria. No delivery.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5">4</div>
+                        <div>
+                            <p class="text-xs font-medium">Test before you take</p>
+                            <p class="text-[11px] t-label mt-0.5">Power it on, check everything.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Selling -->
+            <div class="glass-light p-4 reveal">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+                        <i data-lucide="arrow-up-circle" class="w-4 h-4 t-dim"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold mb-0.5">Reason for selling</p>
+                        <p class="text-[11px] t-dim font-light leading-relaxed">Upscaling to a higher-spec build. This set served me well — fully functional and ready for someone who needs a solid workstation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save / Share -->
+            <div class="flex gap-2 reveal">
+                <button onclick="copyLink()" class="ghost-btn flex-1 !justify-center border border-white/10">
+                    <i data-lucide="link" class="w-3.5 h-3.5"></i>
+                    <span id="copyLinkTxt">Copy link</span>
+                </button>
+                <button onclick="shareNative()" class="ghost-btn flex-1 !justify-center border border-white/10">
+                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                    Share
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- More Photos — full bleed on mobile -->
+<section class="px-4 sm:px-6 lg:px-8 pb-6">
+    <div class="divider mb-6"></div>
+    <p class="text-[9px] font-semibold tracking-[.15em] uppercase t-label mb-3 flex items-center gap-2 reveal">
+        <i data-lucide="images" class="w-3 h-3"></i> More Photos
+    </p>
+    <div class="photos-grid reveal">
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(1)" style="aspect-ratio:4/3">
+            <img src="pcSet1.jpg" alt="PC Set Angle 1" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(3)" style="aspect-ratio:4/3">
+            <img src="fullSet.jpg" alt="Full Setup" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(4)" style="aspect-ratio:4/3">
+            <img src="processor.jpg" alt="Processor Detail" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(5)" style="aspect-ratio:4/3">
+            <img src="screenMirror.jpg" alt="Screen Mirroring" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(6)" style="aspect-ratio:4/3">
+            <img src="pcSet2.jpg" alt="PC Set Angle 2" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in" onclick="openLightbox(7)" style="aspect-ratio:4/3">
+            <img src="led.jpg" alt="Monitor" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="main-image-wrap cursor-zoom-in wide" onclick="openLightbox(8)" style="aspect-ratio:16/7">
+            <img src="study.jpg" alt="Study Setup" class="w-full h-full object-cover" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA — full bleed on mobile -->
+<section class="px-4 sm:px-6 lg:px-8 pb-10 sm:pb-14">
+    <div class="divider mb-6"></div>
+    <div class="glass-strong p-5 sm:p-8 text-center full-bleed reveal">
+        <p class="text-[9px] font-semibold tracking-[.2em] uppercase t-label mb-3">Interested?</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">R5,500 for the full set.</h2>
+        <p class="t-dim text-sm font-light mb-5 max-w-md mx-auto">PC tower, monitor, DIXON tablet, wireless keyboard & mouse — all included. Collect in Pretoria.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="https://wa.me/27705583893?text=Hi%2C%20I'm%20interested%20in%20the%20PC%20Full%20Set%20(R5%2C500)%20listed%20on%20your%20site." class="card-btn w-full sm:w-auto !justify-center" target="_blank">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                Message me now
+            </a>
+            <a href="tel:0705583893" class="outline-btn w-full sm:w-auto !justify-center">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+                070 558 3893
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer — full bleed -->
+<footer class="px-4 sm:px-6 lg:px-8 py-5 border-t border-white/[.08]">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3 flex-wrap t-label text-[10px]">
+            <span>© 2026</span>
+            <span>·</span>
+            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a>
+            <span>·</span>
+            <span>Pretoria, Gauteng</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="index.html" class="flink">Services</a>
+            <a href="software.html" class="flink">Software</a>
+            <a href="beats.html" class="flink">Beats</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Sticky Price Bar -->
+<div id="stickyBar">
+    <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+            <p class="text-sm font-bold truncate">PC Full Set + Extras</p>
+            <p class="text-lg font-black tracking-tight shrink-0">R5,500</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <a href="https://wa.me/27705583893?text=Hi%2C%20I'm%20interested%20in%20the%20PC%20Full%20Set%20(R5%2C500)." class="card-btn !py-2 !px-3.5 !text-xs" target="_blank">
+                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                Message
+            </a>
+            <a href="tel:0705583893" class="outline-btn !py-2 !px-3.5 !text-xs !border-white/15">
+                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                Call
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+lucide.createIcons();
+
+// === IMAGE GALLERY ===
+const images = [
+    {src:'led2.jpg',alt:'Monitor - Main'},
+    {src:'pcSet1.jpg',alt:'PC Set Angle 1'},
+    {src:'systemInfo.jpg',alt:'System Info'},
+    {src:'fullSet.jpg',alt:'Full Set'},
+    {src:'processor.jpg',alt:'Processor'},
+    {src:'screenMirror.jpg',alt:'Screen Mirror'},
+    {src:'pcSet2.jpg',alt:'PC Set Angle 2'},
+    {src:'led.jpg',alt:'Monitor 2'},
+    {src:'study.jpg',alt:'Study Setup'}
+];
+let currentImgIndex = 0;
+const mainImg = document.getElementById('mainImage');
+const counterText = document.getElementById('imgCounterText');
+const thumbs = document.querySelectorAll('.gallery-thumb');
+
+function setImage(idx, src) {
+    currentImgIndex = idx;
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+        mainImg.src = src;
+        mainImg.alt = images[idx].alt;
+        mainImg.style.opacity = '1';
+    }, 200);
+    counterText.textContent = (idx + 1) + ' / ' + images.length;
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    // Scroll thumb into view on mobile
+    if (window.innerWidth < 640) {
+        thumbs[idx]?.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    }
+}
+
+function nextImage() { setImage((currentImgIndex + 1) % images.length, images[(currentImgIndex + 1) % images.length].src); }
+function prevImage() { setImage((currentImgIndex - 1 + images.length) % images.length, images[(currentImgIndex - 1 + images.length) % images.length].src); }
+
+document.addEventListener('keydown', e => {
+    if (document.getElementById('lightbox').classList.contains('open')) {
+        if (e.key === 'ArrowRight') lbNav(e, 1);
+        else if (e.key === 'ArrowLeft') lbNav(e, -1);
+        else if (e.key === 'Escape') closeLightbox();
+    } else {
+        if (e.key === 'ArrowRight') nextImage();
+        else if (e.key === 'ArrowLeft') prevImage();
+    }
+});
+
+// === LIGHTBOX ===
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbCounter = document.getElementById('lbCounter');
+
+function openLightbox(idx) {
+    currentImgIndex = idx;
+    lbImg.src = images[idx].src;
+    lbCounter.textContent = (idx + 1) + ' / ' + images.length;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+    if (e && e.target !== lightbox && !e.target.closest('.lb-nav') && !e.target.closest('button')) return;
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+}
+function lbNav(e, dir) {
+    e.stopPropagation();
+    currentImgIndex = (currentImgIndex + dir + images.length) % images.length;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+        lbImg.src = images[currentImgIndex].src;
+        lbImg.style.opacity = '1';
+    }, 150);
+    lbCounter.textContent = (currentImgIndex + 1) + ' / ' + images.length;
+    setImage(currentImgIndex, images[currentImgIndex].src);
+}
+
+// === VIDEO ===
+const videoWrap = document.getElementById('videoWrap');
+const videoPlayer = document.getElementById('videoPlayer');
+let isPlaying = false;
+
+function toggleVideo() {
+    if (isPlaying) {
+        videoPlayer.pause();
+        videoWrap.classList.remove('playing');
+        isPlaying = false;
+    } else {
+        videoPlayer.play();
+        videoWrap.classList.add('playing');
+        isPlaying = true;
+    }
+}
+videoPlayer.addEventListener('ended', () => {
+    videoWrap.classList.remove('playing');
+    isPlaying = false;
+});
+
+// === SCROLL PROGRESS ===
+window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('scrollProgress').style.width = pct + '%';
+    const bar = document.getElementById('stickyBar');
+    if (h.scrollTop > 500) bar.classList.add('show');
+    else bar.classList.remove('show');
+}, {passive: true});
+
+// === SCROLL REVEAL ===
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, {threshold: 0.08, rootMargin: '0px 0px -30px 0px'});
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// === TOAST ===
+function toast(m) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = m;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// === COPY LINK ===
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        document.getElementById('copyLinkTxt').textContent = 'Copied!';
+        toast('Link copied');
+        setTimeout(() => document.getElementById('copyLinkTxt').textContent = 'Copy link', 1500);
+    }).catch(() => toast('Could not copy'));
+}
+
+// === NATIVE SHARE ===
+function shareNative() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'PC Full Set for Sale — R5,500',
+            text: 'PC Full Set + DIXON Tablet + Wireless KB & Mouse. i7 4th Gen, 16GB RAM, 1TB HDD. Pretoria, Gauteng.',
+            url: window.location.href
+        }).catch(() => {});
+    } else {
+        copyLink();
+    }
+}
+
+// === TOUCH SWIPE ===
+let touchStartX = 0;
+const mainWrap = document.getElementById('mainImageWrap');
+mainWrap.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+mainWrap.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) { if (diff < 0) nextImage(); else prevImage(); }
+}, {passive: true});
+
+let lbTouchX = 0;
+lightbox.addEventListener('touchstart', e => { lbTouchX = e.changedTouches[0].screenX; }, {passive: true});
+lightbox.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenX - lbTouchX;
+    if (Math.abs(diff) > 50) { if (diff < 0) lbNav(e, 1); else lbNav(e, -1); }
+}, {passive: true});
+</script>
+</body>
+</html>
