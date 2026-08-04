@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs — JOBJACK</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23fff'/><circle cx='16' cy='16' r='4' fill='%23000'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Inter',sans-serif;
+            color:#fff;
+            overflow-x:hidden;
+            background:#09090b;
+            background-image:url('greens.jpg');
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+            background-repeat:no-repeat;
+        }
+        body::before{
+            content:'';position:fixed;inset:0;z-index:0;
+            background:rgba(0,0,0,.78);
+            pointer-events:none;
+        }
+        body>*{position:relative;z-index:1}
+        ::selection{background:#fff;color:#000}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        @keyframes slideDown{from{transform:translateY(0)}to{transform:translateY(100%)}}
+
+        .anim-1{animation:fadeUp .7s ease-out forwards}
+        .anim-2{animation:fadeUp .7s ease-out .12s forwards;opacity:0}
+        .anim-3{animation:fadeUp .7s ease-out .24s forwards;opacity:0}
+        .anim-4{animation:fadeUp .7s ease-out .36s forwards;opacity:0}
+        .anim-5{animation:fadeUp .7s ease-out .48s forwards;opacity:0}
+        .anim-6{animation:fadeUp .7s ease-out .60s forwards;opacity:0}
+
+        .stat-num{animation:countUp .6s ease-out forwards;opacity:0}
+
+        .job-card{
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:14px;
+            transition:all .35s cubic-bezier(.4,0,.2,1);
+            text-decoration:none;
+            color:#fff;
+            display:block;
+        }
+        .job-card:hover{
+            background:rgba(255,255,255,.1);
+            border-color:rgba(255,255,255,.2);
+            transform:translateY(-3px);
+            box-shadow:0 12px 40px rgba(0,0,0,.4);
+        }
+        .job-card:hover .job-arrow{transform:translateX(3px);opacity:1}
+        .job-card:hover .job-icon-wrap{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.12)}
+
+        .job-icon-wrap{
+            width:46px;height:46px;border-radius:12px;
+            background:rgba(255,255,255,.07);
+            border:1px solid rgba(255,255,255,.1);
+            display:flex;align-items:center;justify-content:center;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            flex-shrink:0;
+            overflow:hidden;
+            position:relative;
+        }
+        .job-icon-wrap img{
+            width:28px;height:28px;
+            object-fit:contain;
+            border-radius:4px;
+        }
+        .job-icon-wrap .fallback-icon{
+            position:absolute;inset:0;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .job-arrow{transition:all .25s ease;opacity:.3;flex-shrink:0}
+
+        .company-badge{
+            display:inline-flex;align-items:center;gap:5px;
+            padding:3px 9px;border-radius:6px;
+            background:rgba(255,255,255,.07);
+            font-size:10px;font-weight:600;
+            letter-spacing:.06em;text-transform:uppercase;
+            color:#aaa;
+        }
+        .company-badge img{
+            width:14px;height:14px;
+            object-fit:contain;
+            border-radius:3px;
+        }
+
+        .nav-link{
+            color:#999;text-decoration:none;font-size:12px;
+            font-weight:500;letter-spacing:.04em;transition:color .25s;
+            display:inline-flex;align-items:center;gap:5px;
+        }
+        .nav-link:hover,.nav-link.active{color:#fff}
+
+        .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent)}
+
+        .flink{
+            color:#888;text-decoration:none;font-size:11px;
+            transition:color .25s;text-underline-offset:2px;
+            text-decoration:underline;text-decoration-color:rgba(255,255,255,.1);
+        }
+        .flink:hover{color:#ccc;text-decoration-color:rgba(255,255,255,.25)}
+
+        .t-dim{color:#999}
+        .t-label{color:#777}
+        .t-muted{color:#aaa}
+        .t-sub{color:#bbb}
+
+        .toast{transform:translateY(16px);opacity:0;transition:all .35s ease}
+        .toast.show{transform:translateY(0);opacity:1}
+
+        .cookie-bar{animation:slideUp .45s ease-out forwards}
+        .cookie-bar.hiding{animation:slideDown .35s ease-in forwards}
+
+        .modal-bg{opacity:0;pointer-events:none;transition:opacity .25s ease}
+        .modal-bg.open{opacity:1;pointer-events:auto}
+        .modal-box{transform:translateY(16px) scale(.97);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+        .modal-bg.open .modal-box{transform:translateY(0) scale(1)}
+
+        .ghost-btn-style{
+            background:transparent;color:#999;border:none;
+            padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;
+            transition:all .3s ease;font-family:inherit;border-radius:8px;
+            display:inline-flex;align-items:center;gap:6px;
+        }
+        .ghost-btn-style:hover{color:#fff;background:rgba(255,255,255,.08)}
+
+        .scroll-y::-webkit-scrollbar{width:3px}
+        .scroll-y::-webkit-scrollbar-track{background:transparent}
+        .scroll-y::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+    </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div id="toast" class="toast fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] bg-white text-black px-5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2 shadow-2xl">
+    <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <span id="toastMsg"></span>
+</div>
+
+<!-- Cookie -->
+<div id="cookieBar" class="cookie-bar fixed bottom-0 left-0 right-0 z-[55] p-3">
+    <div class="max-w-lg mx-auto bg-[#151517] border border-white/15 rounded-2xl p-5" style="backdrop-filter:blur(20px)">
+        <div class="flex items-start gap-3 mb-3">
+            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="cookie" class="w-3.5 h-3.5 t-muted"></i>
+            </div>
+            <p class="t-muted text-xs font-light leading-relaxed">This site uses one essential cookie to remember your preference. No tracking, no analytics, no third-party cookies.</p>
+        </div>
+        <div class="flex items-center gap-2 pl-10">
+            <button onclick="acceptCookies()" class="bg-white text-black border-none rounded-[10px] px-4 py-2 text-xs font-semibold cursor-pointer font-[inherit] transition-all hover:bg-gray-200">Accept</button>
+            <button onclick="openModal('cookies')" class="ghost-btn-style !text-xs !py-2">Details</button>
+        </div>
+    </div>
+</div>
+
+<!-- Nav -->
+<nav class="fixed top-0 left-0 right-0 z-40 px-5 sm:px-8 py-4 flex items-center justify-between" style="backdrop-filter:blur(16px);background:rgba(9,9,11,.5)">
+    <div class="flex items-center gap-5 sm:gap-7">
+        <a href="index.html" class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
+                <div class="w-2 h-2 rounded-full bg-black"></div>
+            </div>
+        </a>
+        <div class="flex items-center gap-4 sm:gap-5">
+            <a href="index.html" class="nav-link">Services</a>
+            <a href="sellMyStuff.html" class="nav-link">
+                <i data-lucide="tag" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">For Sale</span>
+            </a>
+            <a href="software.html" class="nav-link">
+                <i data-lucide="code" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Software</span>
+            </a>
+            <a href="beats.html" class="nav-link">
+                <i data-lucide="music" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Beats</span>
+            </a>
+            <a href="jobs.html" class="nav-link active">
+                <i data-lucide="briefcase" class="w-3 h-3"></i>
+                <span class="hidden sm:inline">Jobs</span>
+            </a>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <a href="tel:0705583893" class="nav-link">
+            <i data-lucide="phone" class="w-3 h-3"></i>
+            <span class="hidden md:inline">070 558 3893</span>
+        </a>
+        <div class="hidden sm:flex items-center gap-1.5">
+            <div class="w-1.5 h-1.5 rounded-full bg-green-400" style="box-shadow:0 0 6px rgba(74,222,128,.5)"></div>
+            <span class="text-[10px] font-medium t-dim uppercase tracking-wider">Open</span>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="pt-28 sm:pt-32 pb-8 sm:pb-10 px-5 sm:px-8 max-w-[1200px] mx-auto">
+    <p class="text-[10px] font-semibold tracking-[.2em] uppercase t-label mb-5 anim-1">South Africa — Job Listings</p>
+    <h1 class="text-[clamp(2.2rem,7vw,4.5rem)] font-extrabold leading-[.92] tracking-tight anim-2">
+        Find work,<br>
+        <span class="t-dim">near you.</span>
+    </h1>
+    <div class="mt-6 flex items-center gap-3 anim-3">
+        <div class="w-8 h-px bg-white/20"></div>
+        <p class="t-muted text-sm font-light">Curated from <span class="font-semibold text-white">JOBJACK</span></p>
+    </div>
+    <div class="mt-10 grid grid-cols-3 gap-4 max-w-sm anim-4">
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold stat-num" style="animation-delay:.5s">5</p>
+            <p class="text-[10px] t-label mt-0.5 uppercase tracking-wider font-medium">Open roles</p>
+        </div>
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold stat-num" style="animation-delay:.6s">SA</p>
+            <p class="text-[10px] t-label mt-0.5 uppercase tracking-wider font-medium">Nationwide</p>
+        </div>
+        <div>
+            <p class="text-2xl sm:text-3xl font-bold stat-num" style="animation-delay:.7s">Free</p>
+            <p class="text-[10px] t-label mt-0.5 uppercase tracking-wider font-medium">To apply</p>
+        </div>
+    </div>
+</section>
+
+<!-- JOBJACK Source Notice -->
+<div class="px-5 sm:px-8 max-w-[1200px] mx-auto anim-4">
+    <div class="flex items-center gap-3 py-3 px-4 rounded-xl border border-white/10" style="background:rgba(255,255,255,.04)">
+        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+            <i data-lucide="info" class="w-4 h-4 t-muted"></i>
+        </div>
+        <p class="t-dim text-xs font-light leading-relaxed">All listings below are sourced from <span class="font-semibold text-white">JOBJACK</span> — South Africa's job platform. Clicking a card takes you to the full listing on their site.</p>
+    </div>
+</div>
+
+<!-- Job Cards -->
+<section class="px-5 sm:px-8 py-10 sm:py-14 max-w-[1200px] mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+
+        <!-- PEP Sales Assistant -->
+        <a href="https://yourls.jobjack.co.za/MaropengReferral38158" target="_blank" rel="noopener noreferrer" class="job-card p-4 sm:p-5 anim-4">
+            <div class="flex items-start gap-4">
+                <div class="job-icon-wrap">
+                    <img src="https://www.google.com/s2/favicons?domain=pepstores.co.za&sz=128" alt="PEP" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="fallback-icon" style="display:none">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 t-sub"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                            <span class="company-badge">
+                                <img src="https://www.google.com/s2/favicons?domain=pepstores.co.za&sz=64" alt="" onerror="this.style.display='none'">
+                                PEP
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold tracking-tight mt-2">Part-Time Sales Assistant</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 job-arrow mt-1"></i>
+                    </div>
+                    <p class="t-dim text-xs font-light leading-relaxed mb-3">Join the PEP retail team. Assist customers, manage stock, keep the floor clean. Part-time hours, entry-level friendly.</p>
+                    <div class="flex items-center gap-3 text-[10px] font-medium t-label">
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Part-time</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="store" class="w-3 h-3"></i>Retail</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i>SA</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- KFC Food Service -->
+        <a href="https://yourls.jobjack.co.za/MaropengReferral82531" target="_blank" rel="noopener noreferrer" class="job-card p-4 sm:p-5 anim-5">
+            <div class="flex items-start gap-4">
+                <div class="job-icon-wrap">
+                    <img src="https://www.google.com/s2/favicons?domain=kfc.co.za&sz=128" alt="KFC" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="fallback-icon" style="display:none">
+                        <i data-lucide="utensils" class="w-5 h-5 t-sub"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                            <span class="company-badge">
+                                <img src="https://www.google.com/s2/favicons?domain=kfc.co.za&sz=64" alt="" onerror="this.style.display='none'">
+                                KFC
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold tracking-tight mt-2">Food Service Team Member</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 job-arrow mt-1"></i>
+                    </div>
+                    <p class="t-dim text-xs font-light leading-relaxed mb-3">Serve customers, prep food, maintain kitchen standards. Fast-paced environment, no experience required — they train you.</p>
+                    <div class="flex items-center gap-3 text-[10px] font-medium t-label">
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Full-time</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="chef-hat" class="w-3 h-3"></i>Food Service</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i>SA</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Code 14 Driver -->
+        <a href="https://yourls.jobjack.co.za/MaropengReferral40779" target="_blank" rel="noopener noreferrer" class="job-card p-4 sm:p-5 anim-5">
+            <div class="flex items-start gap-4">
+                <div class="job-icon-wrap">
+                    <div class="fallback-icon">
+                        <i data-lucide="truck" class="w-5 h-5 t-sub"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                            <span class="company-badge">Logistics</span>
+                            <h3 class="text-base sm:text-lg font-bold tracking-tight mt-2">Code 14 Driver</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 job-arrow mt-1"></i>
+                    </div>
+                    <p class="t-dim text-xs font-light leading-relaxed mb-3">Heavy-duty driving role. Valid Code 14 licence required, PDP preferred. Long-distance and regional routes available.</p>
+                    <div class="flex items-center gap-3 text-[10px] font-medium t-label">
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Full-time</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="truck" class="w-3 h-3"></i>Driving</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i>SA</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- OWN IT Sales Rep -->
+        <a href="https://yourls.jobjack.co.za/MaropengReferral31118" target="_blank" rel="noopener noreferrer" class="job-card p-4 sm:p-5 anim-6">
+            <div class="flex items-start gap-4">
+                <div class="job-icon-wrap">
+                    <img src="https://www.google.com/s2/favicons?domain=ownit.co.za&sz=128" alt="OWN IT" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="fallback-icon" style="display:none">
+                        <i data-lucide="megaphone" class="w-5 h-5 t-sub"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                            <span class="company-badge">
+                                <img src="https://www.google.com/s2/favicons?domain=ownit.co.za&sz=64" alt="" onerror="this.style.display='none'">
+                                OWN IT
+                            </span>
+                            <h3 class="text-base sm:text-lg font-bold tracking-tight mt-2">Sales Representative</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 job-arrow mt-1"></i>
+                    </div>
+                    <p class="t-dim text-xs font-light leading-relaxed mb-3">Drive sales, build client relationships, hit targets. Commission-based with earning potential. Self-motivated individuals wanted.</p>
+                    <div class="flex items-center gap-3 text-[10px] font-medium t-label">
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Full-time</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i>Sales</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i>SA</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Branch Manager -->
+        <a href="https://yourls.jobjack.co.za/MaropengReferral72046" target="_blank" rel="noopener noreferrer" class="job-card p-4 sm:p-5 anim-6 sm:col-span-2 lg:col-span-1">
+            <div class="flex items-start gap-4">
+                <div class="job-icon-wrap">
+                    <div class="fallback-icon">
+                        <i data-lucide="building-2" class="w-5 h-5 t-sub"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                            <span class="company-badge">Management</span>
+                            <h3 class="text-base sm:text-lg font-bold tracking-tight mt-2">Branch Manager</h3>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 job-arrow mt-1"></i>
+                    </div>
+                    <p class="t-dim text-xs font-light leading-relaxed mb-3">Oversee daily branch operations, lead a team, manage performance targets and customer experience. Leadership role with growth potential.</p>
+                    <div class="flex items-center gap-3 text-[10px] font-medium t-label">
+                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>Full-time</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="users" class="w-3 h-3"></i>Management</span>
+                        <span class="w-0.5 h-0.5 rounded-full bg-white/20"></span>
+                        <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i>SA</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<!-- JOBJACK CTA -->
+<section class="px-5 sm:px-8 pb-14 sm:pb-20 max-w-[1200px] mx-auto">
+    <div class="divider mb-10"></div>
+    <div class="max-w-md">
+        <p class="text-[10px] font-semibold tracking-[.15em] uppercase t-label mb-2">More jobs</p>
+        <h2 class="text-xl sm:text-2xl font-bold tracking-tight mb-2">Want to see more?</h2>
+        <p class="t-dim text-sm font-light mb-5 leading-relaxed">These are just a few. JOBJACK has hundreds of listings across South Africa — retail, driving, admin, warehouse, and more.</p>
+        <a href="https://www.jobjack.co.za" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-white text-black border-none rounded-xl px-6 py-3 text-sm font-semibold cursor-pointer font-[inherit] transition-all hover:bg-gray-200 hover:-translate-y-0.5 hover:shadow-lg no-underline">
+            Visit JOBJACK
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="px-5 sm:px-8 py-6 border-t border-white/[.08]">
+    <div class="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3 flex-wrap t-label text-[10px]">
+            <span>© 2026</span>
+            <span>·</span>
+            <a href="tel:0705583893" class="hover:text-white transition-colors">070 558 3893</a>
+            <span>·</span>
+            <span>ZAR</span>
+        </div>
+        <div class="flex items-center gap-3 flex-wrap">
+            <a href="index.html" class="flink">Services</a>
+            <a href="sellMyStuff.html" class="flink">For Sale</a>
+            <a href="beats.html" class="flink">Beats</a>
+            <a href="software.html" class="flink">Software</a>
+            <a href="jobs.html" class="flink">Jobs</a>
+            <button onclick="openModal('cookies')" class="flink">Cookies</button>
+            <button onclick="openModal('disclaimer')" class="flink">Disclaimer</button>
+        </div>
+    </div>
+</footer>
+
+<!-- Cookie Modal -->
+<div id="cookieModal" class="modal-bg fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.8);backdrop-filter:blur(8px)">
+    <div class="modal-box w-full max-w-sm bg-[#141416] border border-white/15 rounded-2xl p-6 relative max-h-[85vh] overflow-y-auto scroll-y">
+        <button onclick="closeAllModals()" class="absolute top-3 right-3 w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center hover:bg-white/15 transition-colors border-none cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5 t-dim"></i>
+        </button>
+        <h3 class="text-lg font-bold tracking-tight mb-1">Cookies</h3>
+        <p class="t-dim text-xs font-light mb-5">Transparency, not legalese.</p>
+        <div class="space-y-3">
+            <div class="rounded-xl border border-white/10 p-3.5">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-semibold">Essential</span>
+                    <div class="w-7 h-3.5 rounded-full bg-white/20 flex items-center px-0.5"><div class="w-2.5 h-2.5 rounded-full bg-white"></div></div>
+                </div>
+                <p class="t-dim text-[11px] font-light leading-relaxed">Stores your cookie preference. Can't be turned off.</p>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3.5">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-semibold t-dim">Analytics</span>
+                    <div class="w-7 h-3.5 rounded-full bg-white/8 flex items-center px-0.5"><div class="w-2.5 h-2.5 rounded-full" style="background:#444"></div></div>
+                </div>
+                <p class="t-label text-[11px] font-light">Not used.</p>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3.5">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-semibold t-dim">Marketing</span>
+                    <div class="w-7 h-3.5 rounded-full bg-white/8 flex items-center px-0.5"><div class="w-2.5 h-2.5 rounded-full" style="background:#444"></div></div>
+                </div>
+                <p class="t-label text-[11px] font-light">Not used.</p>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3.5">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-semibold t-dim">Third-Party</span>
+                    <div class="w-7 h-3.5 rounded-full bg-white/8 flex items-center px-0.5"><div class="w-2.5 h-2.5 rounded-full" style="background:#444"></div></div>
+                </div>
+                <p class="t-label text-[11px] font-light">Google Fonts and Google Favicon service may log IPs. Nothing else.</p>
+            </div>
+        </div>
+        <button onclick="acceptCookies();closeAllModals()" class="w-full bg-white text-black border-none rounded-[10px] py-2.5 mt-5 text-xs font-semibold cursor-pointer font-[inherit] transition-all hover:bg-gray-200">Got it</button>
+    </div>
+</div>
+
+<!-- Disclaimer Modal -->
+<div id="discModal" class="modal-bg fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,.8);backdrop-filter:blur(8px)">
+    <div class="modal-box w-full max-w-md bg-[#141416] border border-white/15 rounded-2xl p-6 relative max-h-[85vh] overflow-y-auto scroll-y">
+        <button onclick="closeAllModals()" class="absolute top-3 right-3 w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center hover:bg-white/15 transition-colors border-none cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5 t-dim"></i>
+        </button>
+        <h3 class="text-lg font-bold tracking-tight mb-0.5">Disclaimer</h3>
+        <p class="t-dim text-[10px] mb-5">January 2026</p>
+        <div class="space-y-4 t-dim text-[11px] font-light leading-relaxed">
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">1. Job Listings</h4><p>All job listings are sourced from JOBJACK (jobjack.co.za). We do not own, control, or guarantee these positions. Availability, requirements, and compensation are determined by the hiring companies.</p></div>
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">2. Referral Links</h4><p>Job links are referral links. We may earn a commission if you apply through them. This does not affect the job listing or your application.</p></div>
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">3. No Guarantee</h4><p>We are not a recruitment agency. We do not process applications, conduct interviews, or make hiring decisions. Applying does not guarantee employment.</p></div>
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">4. Accuracy</h4><p>Job details (title, company, requirements) may change without notice. Verify all information on the JOBJACK listing page before applying.</p></div>
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">5. Company Logos</h4><p>Company icons are fetched via Google's public favicon service. We do not claim ownership of any company logos. If a logo doesn't load, a generic icon is shown instead.</p></div>
+            <div><h4 class="text-sm font-semibold mb-1" style="color:#bbb">6. External Links</h4><p>Not responsible for third-party services (JOBJACK, WhatsApp, Google) content or policies.</p></div>
+        </div>
+        <button onclick="closeAllModals()" class="w-full bg-white text-black border-none rounded-[10px] py-3 mt-6 text-sm font-semibold cursor-pointer font-[inherit] transition-all hover:bg-gray-200">Close</button>
+    </div>
+</div>
+
+<script>
+lucide.createIcons();
+
+function getC(n){const m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)'));return m?m[2]:null}
+function setC(n,v,d){const x=new Date();x.setTime(x.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+x.toUTCString()+';path=/;SameSite=Lax'}
+if(getC('cookie_consent'))document.getElementById('cookieBar').style.display='none';
+
+function acceptCookies(){setC('cookie_consent','accepted',365);const b=document.getElementById('cookieBar');b.classList.add('hiding');setTimeout(()=>b.style.display='none',350)}
+
+function openModal(type){
+    closeAllModals();
+    if(type==='cookies'){document.getElementById('cookieModal').classList.add('open');document.body.style.overflow='hidden';return}
+    else if(type==='disclaimer'){document.getElementById('discModal').classList.add('open');document.body.style.overflow='hidden';return}
+}
+function closeAllModals(){document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('open'));document.body.style.overflow=''}
+
+document.querySelectorAll('.modal-bg').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeAllModals()}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAllModals()});
+
+function toast(m){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+</script>
+</body>
+</html>
